@@ -199,7 +199,7 @@ CREATE TABLE Motherboard_Powers(
   WIFI			      VARCHAR(100),
   Brand			      VARCHAR(100),
   Power		        INT,
-  Expansion_slots VARCHAR(100),
+  Expansion_Slots VARCHAR(100),
   Price			      NUMBER,
   Memory_Slots	  INT, 
   DDR 			      VARCHAR(100),
