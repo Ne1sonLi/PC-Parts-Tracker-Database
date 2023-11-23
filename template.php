@@ -82,7 +82,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	<h2>Reset</h2>
 	<p>To reset the tables to the original values, please click the "Reset" button below. If this is the first time you're running this page, please click "Reset" to initialize the tables</p>
 
-	<form method="POST" action="oracle-test.php">
+	<form method="POST" action="template.php">
 		<!-- "action" specifies the file or page that will receive the form data for processing. As with this example, it can be this same file. -->
 		<input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
 		<p><input type="submit" value="Reset" name="reset"></p>
@@ -91,7 +91,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	<hr />
 
 	<h2>Insert Values into DemoTable</h2>
-	<form method="POST" action="oracle-test.php">
+	<form method="POST" action="template.php">
 		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 		Number: <input type="text" name="insNo"> <br /><br />
 		Name: <input type="text" name="insName"> <br /><br />
@@ -104,7 +104,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	<h2>Update Name in DemoTable</h2>
 	<p>This will change all the names that are currently the old name to the new name in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
-	<form method="POST" action="oracle-test.php">
+	<form method="POST" action="template.php">
 		<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
 		Old Name: <input type="text" name="oldName"> <br /><br />
 		New Name: <input type="text" name="newName"> <br /><br />
@@ -115,7 +115,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	<hr />
 
 	<h2>Count the Tuples in DemoTable</h2>
-	<form method="GET" action="oracle-test.php">
+	<form method="GET" action="template.php">
 		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
 		<input type="submit" name="countTuples"></p>
 	</form>
@@ -123,7 +123,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	<hr />
 
 	<h2>Display Tuples in DemoTable</h2>
-	<form method="GET" action="oracle-test.php">
+	<form method="GET" action="template.php">
 		<input type="hidden" id="displayTuplesRequest" name="displayTuplesRequest">
 		<input type="submit" name="displayTuples"></p>
 	</form>
@@ -269,21 +269,76 @@ if (isset($_POST['resetTablesRequest'])) {
 		oci_commit($db_conn);
 	}
 
+	// function handleInsertRequest()
+	// {
+	// 	global $db_conn;
+
+	// 	//Getting the values from user and insert data into the table
+	// 	$tuple = array(
+	// 		":bind1" => $_POST['insNo'],
+	// 		":bind2" => $_POST['insName']
+	// 	);
+
+	// 	$alltuples = array(
+	// 		$tuple
+	// 	);
+
+	// 	executeBoundSQL("insert into demoTable (id, name) values (:bind1, :bind2)", $alltuples);
+	// 	oci_commit($db_conn);
+	// }
+
+	function insertTuple($insertStatement, $values)
+	{
+		global $db_conn;
+
+		// Prepare the SQL statement
+		$statement = oci_parse($db_conn, $insertStatement);
+
+		if (!$statement) {
+			$e = oci_error($db_conn);
+			echo "Error preparing statement: " . htmlentities($e['message']);
+			return false;
+		}
+
+		// Bind parameters
+		foreach ($values as $bind => &$val) {
+			oci_bind_by_name($statement, $bind, $val);
+		}
+
+		// Execute the statement
+		$result = oci_execute($statement, OCI_COMMIT_ON_SUCCESS);
+
+		if (!$result) {
+			$e = oci_error($statement);
+			echo "Error executing statement: " . htmlentities($e['message']);
+			return false;
+		}
+
+		// Commit the transaction
+		oci_commit($db_conn);
+
+		return true;
+	}
+
 	function handleInsertRequest()
 	{
 		global $db_conn;
 
 		//Getting the values from user and insert data into the table
-		$tuple = array(
+		$values = array(
 			":bind1" => $_POST['insNo'],
 			":bind2" => $_POST['insName']
 		);
 
-		$alltuples = array(
-			$tuple
-		);
+		$insertStatement = "INSERT INTO your_table (column1, column2) VALUES (:bind1, :bind2)";
+		// Call the function
+		$result = insertTuple($db_conn, $insertStatement, $values);
 
-		executeBoundSQL("insert into demoTable (id, name) values (:bind1, :bind2)", $alltuples);
+		if ($result) {
+			echo "Tuple inserted successfully!";
+		} else {
+			echo "Failed to insert tuple.";
+		}
 		oci_commit($db_conn);
 	}
 
