@@ -44,12 +44,10 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 // The next tag tells the web server to stop parsing the text as PHP. Use the
 // pair of tags wherever the content switches to PHP
 
-
-// // ADDED THIS : Check if buttons have been clicked
+// ADDED THIS : Check if buttons have been clicked
 if (isset($_POST['resetTablesRequest'])) {
     // The reset button was clicked, call the handleResetRequest function
     handleResetRequest();
-	handleDisplayRequest();
 	echo "Reset/Initialized Tables!";
 } elseif (isset($_POST['insertQueryRequest'])) {
 	// The insert button was clicked, call the handleResetRequest function
@@ -88,46 +86,103 @@ if (isset($_POST['resetTablesRequest'])) {
 		<p><input type="submit" value="Reset" name="reset"></p>
 	</form>
 
-	<hr />
+	<!-- ADDED THIS -->
+	<style>
+		.form-block {
+			display: flex;
+			justify-content: space-between;
+			height: 500px;
+		}
+		.form-section {
+			display: inline-block;
+			width: 30%;
+			/* height: 300px;  */
+			margin-right: 2%;
+		}
+	</style>
 
-	<h2>Insert Values into CPUCooler Table</h2>
-	<form method="POST" action="template.php">
-		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-		Model: <input type="text" name="insModel"> <br /><br />
-		Size: <input type="text" name="insSize"> <br /><br />
-		Price: <input type="text" name="insPrice"> <br /><br />
-		CPU_Model: <input type="text" name="insCPU_Model"> <br /><br />
+	<div class="form-container">
+		<div class="form-section">
+			<hr />
+			<h2>Insert Values into CPU Cooler Table</h2>
+			<p>This will insert a new row into the currect CPU Cooler Table. (*) fields must be entered.</p>
+			<form method="POST" action="template.php">
+				<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
+				Model (*): <input type="text" name="insModel"> <br /><br />
+				CPUCooler_Size (*): <input type="text" name="insSize"> <br /><br />
+				Price : <input type="text" name="insSize"> <br /><br />
+				CPU_Model : <input type="text" name="insSize"> <br /><br />
 
-		<input type="submit" value="Insert" name="insertSubmit"></p>
-	</form>
+				<input type="submit" value="Insert" name="insertSubmit"></p>
+			</form>
+			<hr />
+		</div>
 
-	<hr />
+		<div class="form-section">
+			<hr />
+			<h2>Delete Row in CPU Cooler Table</h2>
+			<p>This delete a row in the CPU Cooler Table. Specify the row by stating its Model and Size.</p>
+			<form method="POST" action="template.php">
+				<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+				Model : <input type="text" name="delModel"> <br /><br />
+				CPUCooler_Size : <input type="text" name="delSize"> <br /><br />
 
-	<h2>Delete Values From CPUCooler Table</h2>
-	<form method="POST" action="template.php">
-		<input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
-		Model: <input type="text" name="delModel"> <br /><br />
-		Size: <input type="text" name="delSize"> <br /><br />
+				<input type="submit" value="Delete" name="deleteSubmit"></p>
+			</form>
+			<hr />
+		</div>
 
-		<input type="submit" value="Delete" name="deleteSubmit"></p>
-	</form>
+		<div class="form-section">
+			<hr />
+			<h2>Update Name in CPU Cooler Table</h2>
+			<p>This will change all the names that are currently the old name to the new name in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+			<form method="POST" action="template.php">
+				<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+				Model : <input type="text" name="upModel"> <br /><br />
+				CPUCooler_Size : <input type="text" name="upSize"> <br /><br />
+				Column to Change: <input type="text" name="upCol"> <br /><br />
+				New Value: <input type="text" name="newVal"> <br /><br />
 
-	<hr />
+				<input type="submit" value="Update" name="updateSubmit"></p>
+			</form>
+			<hr />
+		</div>
+	</div>
 
-	<h2>Update Name in CPUCooler Table</h2>
-	<p>This will change all the names that are currently the old name to the new name in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+	<!-- ADDED THIS -->
+	<style>
+        .table-container {
+            display: inline-block;
+            margin-right: 20px;
+        }
+    </style>
 
-	<form method="POST" action="template.php">
-		<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-		Old Model: <input type="text" name="oldName"> <br /><br />
-		Old Size: <input type="text" name="oldSize"> <br /><br />
-		Column to Change: <input type="text" name="updateColName"> <br /><br />
-		New Value: <input type="text" name="updateColVal"> <br /><br />
+	<div>
+		<div class="table-continer">
+			<h2>CPU Cooler Table</h2>
 
-		<input type="submit" value="Update" name="updateSubmit"></p>
-	</form>
+			<?php
+			$sql = "SELECT * FROM CPUCooler_On";
+			$result = executePlainSQL($sql);
+			echo "<table border='5'>";
+			printCPUCoolerTable($result);
+			echo "</table>";
+			?>
+		</div>
 
-	<hr />
+		<div class="table-continer">
+			<h2>CPU Table</h2>
+
+			<?php
+			$sql = "SELECT * FROM CPU_On";
+			$result = executePlainSQL($sql);
+			echo "<table border='5'>";
+			printCPUCoolerTable($result);
+			echo "</table>";
+			?>
+		</div>
+    </div>
+
 
 	<!-- <h2>Count the Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
@@ -218,6 +273,26 @@ if (isset($_POST['resetTablesRequest'])) {
 		}
 	}
 
+	// ADDED THIS
+	function printCPUCoolerTable($result)
+	{
+		echo "<tr>";
+		for ($i = 1; $i <= oci_num_fields($result); $i++) {
+			$col_name = oci_field_name($result, $i);
+			echo "<th>$col_name</th>";
+		}
+		echo "</tr>";
+
+		while ($row = oci_fetch_assoc($result)) {
+			echo "<tr>";
+			foreach ($row as $column => $value) {
+				echo "<td>$value</td>";
+			}
+			echo "</tr>";
+		}
+	}
+
+
 	function printResult($result)
 	{ //prints results from a select statement
 		echo "<br>Retrieved data from table demoTable:<br>";
@@ -275,64 +350,35 @@ if (isset($_POST['resetTablesRequest'])) {
 	function handleResetRequest()
 	{
 		global $db_conn;
-		// Drop old table
-		executePlainSQL("DROP TABLE demoTable cascade constraints");
 
 		// Create new table
-		echo "<br> creating new table <br>";
-		executePlainSQL("CREATE TABLE demoTable (id int PRIMARY KEY, name VARCHAR(30))");
+		echo "<br> Reseting / Initializing tables for PC parts <br>";
+		// executePlainSQL("start pc_project.sql");
+
+		$scriptContents = file_get_contents("../cs304/project_a0b7q_a1s7u_s8i3z/pc_project.sql");
+		$commands = explode(";", $scriptContents);
+
+		foreach ($commands as $command) {
+			$command = trim($command);
+			$statement = oci_parse($db_conn, $command);
+
+            if (!$statement) {
+                echo "<br>Cannot parse the following command: " . $command . "<br>";
+                $e = OCI_Error($db_conn);
+                echo htmlentities($e['message']);
+                $success = false;
+            } else {
+                $r = oci_execute($statement, OCI_DEFAULT);
+                if (!$r && oci_error($statement)['code'] != 942) {
+					// Ignore error code 942, which indicates the table does not exist
+                    echo "<br>Cannot execute the following command: " . $command . "<br>";
+                    $e = oci_error($statement);
+                    echo htmlentities($e['message']);
+                    $success = false;
+                }
+            }
+        }
 		oci_commit($db_conn);
-	}
-
-	// function handleInsertRequest()
-	// {
-	// 	global $db_conn;
-
-	// 	//Getting the values from user and insert data into the table
-	// 	$tuple = array(
-	// 		":bind1" => $_POST['insNo'],
-	// 		":bind2" => $_POST['insName']
-	// 	);
-
-	// 	$alltuples = array(
-	// 		$tuple
-	// 	);
-
-	// 	executeBoundSQL("insert into demoTable (id, name) values (:bind1, :bind2)", $alltuples);
-	// 	oci_commit($db_conn);
-	// }
-
-	function insertTuple($insertStatement, $values)
-	{
-		global $db_conn;
-
-		// Prepare the SQL statement
-		$statement = oci_parse($db_conn, $insertStatement);
-
-		if (!$statement) {
-			$e = oci_error($db_conn);
-			echo "Error preparing statement: " . htmlentities($e['message']);
-			return false;
-		}
-
-		// Bind parameters
-		foreach ($values as $bind => &$val) {
-			oci_bind_by_name($statement, $bind, $val);
-		}
-
-		// Execute the statement
-		$result = oci_execute($statement, OCI_COMMIT_ON_SUCCESS);
-
-		if (!$result) {
-			$e = oci_error($statement);
-			echo "Error executing statement: " . htmlentities($e['message']);
-			return false;
-		}
-
-		// Commit the transaction
-		oci_commit($db_conn);
-
-		return true;
 	}
 
 	function handleInsertRequest()
@@ -340,20 +386,16 @@ if (isset($_POST['resetTablesRequest'])) {
 		global $db_conn;
 
 		//Getting the values from user and insert data into the table
-		$values = array(
+		$tuple = array(
 			":bind1" => $_POST['insNo'],
 			":bind2" => $_POST['insName']
 		);
 
-		$insertStatement = "INSERT INTO your_table (column1, column2) VALUES (:bind1, :bind2)";
-		// Call the function
-		$result = insertTuple($db_conn, $insertStatement, $values);
+		$alltuples = array(
+			$tuple
+		);
 
-		if ($result) {
-			echo "Tuple inserted successfully!";
-		} else {
-			echo "Failed to insert tuple.";
-		}
+		executeBoundSQL("insert into demoTable (id, name) values (:bind1, :bind2)", $alltuples);
 		oci_commit($db_conn);
 	}
 
