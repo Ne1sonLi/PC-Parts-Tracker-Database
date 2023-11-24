@@ -90,37 +90,52 @@ if (isset($_POST['resetTablesRequest'])) {
 
 	<hr />
 
-	<h2>Insert Values into DemoTable</h2>
+	<h2>Insert Values into CPUCooler Table</h2>
 	<form method="POST" action="template.php">
 		<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
-		Number: <input type="text" name="insNo"> <br /><br />
-		Name: <input type="text" name="insName"> <br /><br />
+		Model: <input type="text" name="insModel"> <br /><br />
+		Size: <input type="text" name="insSize"> <br /><br />
+		Price: <input type="text" name="insPrice"> <br /><br />
+		CPU_Model: <input type="text" name="insCPU_Model"> <br /><br />
 
 		<input type="submit" value="Insert" name="insertSubmit"></p>
 	</form>
 
 	<hr />
 
-	<h2>Update Name in DemoTable</h2>
+	<h2>Delete Values From CPUCooler Table</h2>
+	<form method="POST" action="template.php">
+		<input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
+		Model: <input type="text" name="delModel"> <br /><br />
+		Size: <input type="text" name="delSize"> <br /><br />
+
+		<input type="submit" value="Delete" name="deleteSubmit"></p>
+	</form>
+
+	<hr />
+
+	<h2>Update Name in CPUCooler Table</h2>
 	<p>This will change all the names that are currently the old name to the new name in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 
 	<form method="POST" action="template.php">
 		<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-		Old Name: <input type="text" name="oldName"> <br /><br />
-		New Name: <input type="text" name="newName"> <br /><br />
+		Old Model: <input type="text" name="oldName"> <br /><br />
+		Old Size: <input type="text" name="oldSize"> <br /><br />
+		Column to Change: <input type="text" name="updateColName"> <br /><br />
+		New Value: <input type="text" name="updateColVal"> <br /><br />
 
 		<input type="submit" value="Update" name="updateSubmit"></p>
 	</form>
 
 	<hr />
 
-	<h2>Count the Tuples in DemoTable</h2>
+	<!-- <h2>Count the Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
 		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
 		<input type="submit" name="countTuples"></p>
 	</form>
 
-	<hr />
+	<hr /> -->
 
 	<h2>Display Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
