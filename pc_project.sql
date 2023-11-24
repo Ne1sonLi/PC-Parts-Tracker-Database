@@ -32,7 +32,6 @@ drop table PowerSupply_In cascade constraints;
 drop table Case_Contains cascade constraints;
 drop table Case_Contains_Brand cascade constraints;
 drop table Mouse cascade constraints;
--- drop table Mouse_Brand cascade constraints;
 drop table Plugged_Into cascade constraints;
 drop table Keyboard cascade constraints;
 drop table Switches cascade constraints;
@@ -102,12 +101,6 @@ CREATE TABLE Mouse(
   Wired_Wireless 	VARCHAR(100),
   PRIMARY KEY (Model, Colour)
 );
-
--- Removed due to space quota exceed for tablespace
--- CREATE TABLE Mouse_Brand(
---   Model   VARCHAR(100)	PRIMARY KEY,
---   Brand		VARCHAR(100)
--- );
 
 CREATE TABLE Keyboard(
   Model	      VARCHAR(100)	PRIMARY KEY,
@@ -400,11 +393,6 @@ INSERT INTO Mouse values('G305 LIGHTSPEED', 'Black', 'Logitech', 'Standard', 99,
 INSERT INTO Mouse values('G502 HERO', 'Black', 'Logitech', 'Standard', 89, 79.99, 'Wired');
 INSERT INTO Mouse values('Basilisk V3', 'Black', 'Razer', 'Ergonomic', 128, 69.99, 'Wired');
 INSERT INTO Mouse values('DeathAdder', 'Black', 'Razer', 'Standard', 96, 29.99, 'Wired');
-
--- INSERT INTO Mouse_Brand values('G305 LIGHTSPEED', 'Logitech');
--- INSERT INTO Mouse_Brand values('G502 HERO', 'Logitech');
--- INSERT INTO Mouse_Brand values('Basilisk V3', 'Razer');
--- INSERT INTO Mouse_Brand values('DeathAdder', 'Razer');
 
 INSERT INTO Keyboard values('Corsair K55 Pro Lite', 'Corsair', 'Black', 100.00, 74.95);
 INSERT INTO Keyboard values('Corsair K70 Pro Mini Wireless', 'Corsair', 'Black', 60.00, 259.99);
