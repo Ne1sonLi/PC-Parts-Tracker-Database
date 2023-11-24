@@ -184,13 +184,13 @@ if (isset($_POST['resetTablesRequest'])) {
     </div>
 
 
-	<!-- <h2>Count the Tuples in DemoTable</h2>
+	<h2>Count the Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
 		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
 		<input type="submit" name="countTuples"></p>
 	</form>
 
-	<hr /> -->
+	<hr />
 
 	<h2>Display Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
