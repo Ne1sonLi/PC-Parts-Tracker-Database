@@ -50,9 +50,13 @@ if (isset($_POST['resetTablesRequest'])) {
     handleResetRequest();
 	echo "Reset/Initialized Tables!";
 } elseif (isset($_POST['insertQueryRequest'])) {
-	// The insert button was clicked, call the handleResetRequest function
+	// The insert button was clicked, call the handleInsertRequest function
 	handleInsertRequest();
 	echo "Inserted values into table!";
+} elseif (isset($_POST['deleteQueryRequest'])) {
+	// The delete button was clicked, call the handleDeleteRequest function
+	handleDeleteRequest();
+	echo "Deleted value from table";
 } elseif (isset($_POST['updateQueryRequest'])) {
 	// The update button was clicked, call the handleUpdateRequest function
     handleUpdateRequest();
@@ -80,7 +84,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	<h2>Reset</h2>
 	<p>To reset the tables to the original values, please click the "Reset" button below. If this is the first time you're running this page, please click "Reset" to initialize the tables</p>
 
-	<form method="POST" action="template.php">
+	<form method="POST" action="wrapper.php">
 		<!-- "action" specifies the file or page that will receive the form data for processing. As with this example, it can be this same file. -->
 		<input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
 		<p><input type="submit" value="Reset" name="reset"></p>
@@ -106,12 +110,12 @@ if (isset($_POST['resetTablesRequest'])) {
 			<hr />
 			<h2>Insert Values into CPU Cooler Table</h2>
 			<p>This will insert a new row into the currect CPU Cooler Table. (*) fields must be entered.</p>
-			<form method="POST" action="template.php">
+			<form method="POST" action="wrapper.php">
 				<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 				Model (*): <input type="text" name="insModel"> <br /><br />
-				CPUCooler_Size (*): <input type="text" name="insSize"> <br /><br />
-				Price : <input type="text" name="insSize"> <br /><br />
-				CPU_Model : <input type="text" name="insSize"> <br /><br />
+				CPUCooler_Size (*): <input type="text" name="insCoolerSize"> <br /><br />
+				Price : <input type="text" name="insPrice"> <br /><br />
+				CPU_Model : <input type="text" name="insCPUModel"> <br /><br />
 
 				<input type="submit" value="Insert" name="insertSubmit"></p>
 			</form>
@@ -122,10 +126,10 @@ if (isset($_POST['resetTablesRequest'])) {
 			<hr />
 			<h2>Delete Row in CPU Cooler Table</h2>
 			<p>This delete a row in the CPU Cooler Table. Specify the row by stating its Model and Size.</p>
-			<form method="POST" action="template.php">
-				<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
+			<form method="POST" action="wrapper.php">
+				<input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
 				Model : <input type="text" name="delModel"> <br /><br />
-				CPUCooler_Size : <input type="text" name="delSize"> <br /><br />
+				CPUCooler_Size : <input type="text" name="delCoolerSize"> <br /><br />
 
 				<input type="submit" value="Delete" name="deleteSubmit"></p>
 			</form>
@@ -136,7 +140,7 @@ if (isset($_POST['resetTablesRequest'])) {
 			<hr />
 			<h2>Update Name in CPU Cooler Table</h2>
 			<p>This will change all the names that are currently the old name to the new name in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-			<form method="POST" action="template.php">
+			<form method="POST" action="wrapper.php">
 				<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
 				Model : <input type="text" name="upModel"> <br /><br />
 				CPUCooler_Size : <input type="text" name="upSize"> <br /><br />
@@ -387,15 +391,35 @@ if (isset($_POST['resetTablesRequest'])) {
 
 		//Getting the values from user and insert data into the table
 		$tuple = array(
-			":bind1" => $_POST['insNo'],
-			":bind2" => $_POST['insName']
+			":bind1" => $_POST['insModel'],
+			":bind2" => $_POST['insCoolerSize'],
+			":bind3" => $_POST['insPrice'],
+			":bind4" => $_POST['insCPUModel']
 		);
 
 		$alltuples = array(
 			$tuple
 		);
 
-		executeBoundSQL("insert into demoTable (id, name) values (:bind1, :bind2)", $alltuples);
+		executeBoundSQL("insert into CPUCooler_On (model, cpucooler_size, price, cpu_model) values (:bind1, :bind2, :bind3, :bind4)", $alltuples);
+		oci_commit($db_conn);
+	}
+
+	function handleDeleteRequest()
+	{
+		global $db_conn;
+
+		//Getting the values from use and delete data from table
+		$tuple = array(
+			":bind1" => $_POST['delModel'],
+			":bind2" => $_POST['delCoolerSize']
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		executeBoundSQL("delete from CPUCooler_On WHERE model = :bind1 AND cpucooler_size = :bind2", $alltuples);
 		oci_commit($db_conn);
 	}
 
@@ -417,6 +441,8 @@ if (isset($_POST['resetTablesRequest'])) {
 				handleUpdateRequest();
 			} else if (array_key_exists('insertQueryRequest', $_POST)) {
 				handleInsertRequest();
+			} else if (array_key_exists('deleteQueryRequest', $_POST)) {
+				handleDeleteRequest();
 			}
 
 			disconnectFromDB();
