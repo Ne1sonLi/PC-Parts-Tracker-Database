@@ -48,19 +48,19 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 if (isset($_POST['resetTablesRequest'])) {
     // The reset button was clicked, call the handleResetRequest function
     handleResetRequest();
-	echo "Reset/Initialized Tables!";
+	// echo "Reset/Initialized Tables!";
 } elseif (isset($_POST['insertQueryRequest'])) {
 	// The insert button was clicked, call the handleInsertRequest function
 	handleInsertRequest();
-	echo "Inserted values into table!";
+	// echo "Inserted values into table!";
 } elseif (isset($_POST['deleteQueryRequest'])) {
 	// The delete button was clicked, call the handleDeleteRequest function
 	handleDeleteRequest();
-	echo "Deleted value from table";
+	// echo "Deleted value from table";
 } elseif (isset($_POST['updateQueryRequest'])) {
 	// The update button was clicked, call the handleUpdateRequest function
     handleUpdateRequest();
-	echo "Updated query!";
+	// echo "Updated table!";
 } elseif (isset($_POST['countTupleRequest'])) {
 	// The count button was clicked, call the handleCountRequest function
 	handleCountRequest();
@@ -142,10 +142,10 @@ if (isset($_POST['resetTablesRequest'])) {
 			<p>This will change all the names that are currently the old name to the new name in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 			<form method="POST" action="wrapper.php">
 				<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
-				Model : <input type="text" name="upModel"> <br /><br />
-				CPUCooler_Size : <input type="text" name="upSize"> <br /><br />
-				Column to Change: <input type="text" name="upCol"> <br /><br />
-				New Value: <input type="text" name="newVal"> <br /><br />
+				Old Price: <input type="text" name="oldPrice"> <br /><br />
+				New Price: <input type="text" name="newPrice"> <br /><br />
+				Old CPU Model: <input type="text" name="oldCPU"> <br /><br />
+				New CPU Model: <input type="text" name="newCPU"> <br /><br />
 
 				<input type="submit" value="Update" name="updateSubmit"></p>
 			</form>
@@ -343,11 +343,14 @@ if (isset($_POST['resetTablesRequest'])) {
 	{
 		global $db_conn;
 
-		$old_name = $_POST['oldName'];
-		$new_name = $_POST['newName'];
+		$old_price = $_POST['oldPrice'];
+		$new_price = $_POST['newPrice'];
+		$old_cpu = $_POST['oldCPU'];
+		$new_cpu = $_POST['newCPU'];
 
 		// you need the wrap the old name and new name values with single quotations
-		executePlainSQL("UPDATE demoTable SET name='" . $new_name . "' WHERE name='" . $old_name . "'");
+		executePlainSQL("UPDATE CPUCooler_On SET price='" . $new_price . "' WHERE price='" . $old_price . "'");
+		executePlainSQL("UPDATE CPUCooler_On SET cpu_model='" . $new_cpu . "' WHERE cpu_model='" . $old_cpu . "'");
 		oci_commit($db_conn);
 	}
 
@@ -409,7 +412,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	{
 		global $db_conn;
 
-		//Getting the values from use and delete data from table
+		//Getting the values from user and delete data from table
 		$tuple = array(
 			":bind1" => $_POST['delModel'],
 			":bind2" => $_POST['delCoolerSize']
