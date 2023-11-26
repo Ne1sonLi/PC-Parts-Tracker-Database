@@ -460,9 +460,9 @@ INSERT INTO Motherboard_Powers values('Pro Z690-P', 'ATX', 'Pro Z Series', 'No',
 
 INSERT INTO CPU_On values('Ryzen 5 5600X', 6, 5000, 'AM4', 160, 'AMD', null, null, null, null);
 INSERT INTO CPU_On values('Ryzen 7 7800X3D', 8, 7000, 'AM5', 370, 'AMD', null, null, null, null);
-INSERT INTO CPU_On values('Ryzen 7 5800X', 8, 5000, 'AM4', 160, 'Intel', null, null, null, null);
-INSERT INTO CPU_On values('Intel Core i7-13700K', 16, 13, 'LGA 1700', 360, 'AMD', null, null, null, null);
-INSERT INTO CPU_On values('Intel Core i9-13900K', 24, 13, 'LGA 1700', 570, 'AMD', null, null, null, null);
+INSERT INTO CPU_On values('Ryzen 7 5800X', 8, 5000, 'AM4', 160, 'AMD', null, null, null, null);
+INSERT INTO CPU_On values('Intel Core i7-13700K', 16, 13, 'LGA 1700', 360, 'Intel', null, null, null, null);
+INSERT INTO CPU_On values('Intel Core i9-13900K', 24, 13, 'LGA 1700', 570, 'Intel', null, null, null, null);
 
 INSERT INTO CPUCooler_On values('DeepCool GAMMAXX AG400 BK ARGB', 120, 39.99, null);
 INSERT INTO CPUCooler_On values('DeepCool GAMMAXX AG400', 120, 34.99, null);
