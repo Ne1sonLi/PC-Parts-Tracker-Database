@@ -285,6 +285,7 @@ if (isset($_POST['resetTablesRequest'])) {
 			if (isset($_POST['broptions']) && !empty($_POST['broptions'])) {
 				$selectedBrands = $_POST['broptions'];
 				$brands = implode(' OR ', $selectedBrands);
+				$brands = "(" . $brands . ")";
 			} else {
 				$brands = "brand IS NOT NULL";
 			}
@@ -292,6 +293,7 @@ if (isset($_POST['resetTablesRequest'])) {
 			if (isset($_POST['coptions']) && !empty($_POST['coptions'])) {
 				$selectedColours = $_POST['coptions'];
 				$colours = implode(' OR ', $selectedColours);
+				$colours = "(" . $colours . ")";
 			} else {
 				$colours = "colour IS NOT NULL";
 			}
@@ -299,6 +301,7 @@ if (isset($_POST['resetTablesRequest'])) {
 			if (isset($_POST['pcoptions']) && !empty($_POST['pcoptions'])) {
 				$selectedPc = $_POST['pcoptions'];
 				$pc = implode(' OR ', $selectedPc);
+				$pc = "(" . $pc . ")";
 			} else {
 				$pc = "percentage <> 0";
 			}
@@ -306,11 +309,13 @@ if (isset($_POST['resetTablesRequest'])) {
 			if (isset($_POST['proptions']) && !empty($_POST['proptions'])) {
 				$selectedPrice = $_POST['proptions'];
 				$price = implode(' OR ', $selectedPrice);
+				$price = "(" . $price . ")";
 			} else {
 				$price = "price <> 0";
 			}
 			
 			$sql = "SELECT * FROM Keyboard WHERE " . $brands . " AND " . $colours . " AND " . $pc . " AND " . $price;
+			echo $sql;
 			$result = executePlainSQL($sql);
 			echo "<table border='5'>";
 			printCPUCoolerTable($result);
