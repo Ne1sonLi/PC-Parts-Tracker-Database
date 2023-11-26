@@ -106,8 +106,8 @@ CREATE TABLE Keyboard(
   Model	      VARCHAR(100)	PRIMARY KEY,
   Brand		    VARCHAR(100),
   Colour 	    VARCHAR(100),
-  Price		    NUMBER,
-  Percentage 	NUMBER
+  Percentage  NUMBER,
+  Price      	NUMBER
 );
 
 CREATE TABLE Switches(
@@ -395,9 +395,12 @@ INSERT INTO Mouse values('Basilisk V3', 'Black', 'Razer', 'Ergonomic', 128, 69.9
 INSERT INTO Mouse values('DeathAdder', 'Black', 'Razer', 'Standard', 96, 29.99, 'Wired');
 
 INSERT INTO Keyboard values('Corsair K55 Pro Lite', 'Corsair', 'Black', 100.00, 74.95);
-INSERT INTO Keyboard values('Corsair K70 Pro Mini Wireless', 'Corsair', 'Black', 60.00, 259.99);
+INSERT INTO Keyboard values('Corsair K70 Pro Mini Wireless', 'Corsair', 'Blue', 60.00, 259.99);
 INSERT INTO Keyboard values('Corsair K100 Air Wireless RGB Ultra-Thin', 'Corsair', 'Black', 100.00, 399.99);
-INSERT INTO Keyboard values('Corsair K100 RGB Optical-Mechanical', 'Corsair', 'Black', 100.00, 349.99);
+INSERT INTO Keyboard values('Corsair K100 RGB Optical-Mechanical', 'Corsair', 'White', 100.00, 349.99);
+INSERT INTO Keyboard values('Logitech G815 LIGHTSYNC RGB Mecahnical W', 'Logitech', 'White', 100.00, 199.99);
+INSERT INTO Keyboard values('Logitech G815 LIGHTSYNC RGB Mecahnical', 'Logitech', 'Black', 100.00, 199.99);
+INSERT INTO Keyboard values('Havit Mechanical Keyboard 89 Keys', 'Havit', 'Black', 85.00, 42.99);
 
 INSERT INTO Switches values('Oil King Axis Pre Lubricated', 'Gateron', 'Black', 'Linear');
 INSERT INTO Switches values('Panda Switch Lubed', 'Glorious Gaming', 'Orange', 'Tactile');

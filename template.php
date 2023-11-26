@@ -61,6 +61,10 @@ if (isset($_POST['resetTablesRequest'])) {
 	// The update button was clicked, call the handleUpdateRequest function
     handleUpdateRequest();
 	// echo "Updated table!";
+} elseif (isset($_POST['selectQueryRequest'])) {
+	// The select/filter button was clicked, call the selectQueryRequest function
+	handleSelectRequest();
+	// echo "Filtered";
 } elseif (isset($_POST['countTupleRequest'])) {
 	// The count button was clicked, call the handleCountRequest function
 	handleCountRequest();
@@ -187,8 +191,137 @@ if (isset($_POST['resetTablesRequest'])) {
 		</div>
     </div>
 
+	<style> 
+		.select-col {
+			display: inline-block;
+    		vertical-align: top;
+    		margin-right: 20px;
+		}
+	</style>
 
-	<h2>Count the Tuples in DemoTable</h2>
+	<div class="select-container">
+		<h2>Select a Keyboard</h2>
+		<p>Select filters below:</p>
+		<div class="form-select">
+			<form method="POST" action="wrapper.php">
+				<div class="select-col">
+					<p>Brand:</p>
+					<label for="option1">
+						<input type="checkbox" id="brand2" name="broptions[]" value="brand = 'Corsair'">
+						Corsair
+					</label><br>
+					<label for="option2">
+						<input type="checkbox" id="brand3" name="broptions[]" value="brand = 'Logitech'">
+						Logitech
+					</label><br>
+					<label for="option3">
+						<input type="checkbox" id="brand3" name="broptions[]" value="brand = 'Havit'">
+						Havit
+					</label><br>
+				</div>
+
+				<div class="select-col">
+					<p>Colour:</p>
+					<label for="option1">
+						<input type="checkbox" id="brand2" name="coptions[]" value="colour = 'Black'">
+						Black
+					</label><br>
+					<label for="option2">
+						<input type="checkbox" id="brand3" name="coptions[]" value="colour = 'White'">
+						White
+					</label><br>
+					<label for="option3">
+						<input type="checkbox" id="brand3" name="coptions[]" value="colour = 'Blue'">
+						Blue
+					</label><br>
+				</div>
+
+				<div class="select-col">
+					<p>Percentage:</p>
+					<label for="option1">
+						<input type="checkbox" id="brand2" name="pcoptions[]" value="percentage = 100">
+						100%
+					</label><br>
+					<label for="option2">
+						<input type="checkbox" id="brand3" name="pcoptions[]" value="percentage = 100">
+						80%
+					</label><br>
+					<label for="option3">
+						<input type="checkbox" id="brand3" name="pcoptions[]" value="percentage = 100">
+						65%
+					</label><br>
+				</div>
+
+				<div class="select-col">
+					<p>Price:</p>
+					<label for="option1">
+						<input type="checkbox" id="brand2" name="proptions[]" value="price < 50">
+						< $50
+					</label><br>
+					<label for="option2">
+						<input type="checkbox" id="brand3" name="proptions[]" value="price < 100">
+						< $100
+					</label><br>
+					<label for="option3">
+						<input type="checkbox" id="brand3" name="proptions[]" value="price < 200">
+						< $200
+					</label><br>
+				</div>
+
+				<br></br>
+				<!-- press button to query on filters -->
+				<input type="Submit" value="Find Keyboards" name="selectSubmit"> 
+			</form>
+			<hr />
+		</div>
+	</div>
+
+	<div>
+		<div class="table-continer">
+			<h2>Filtered Keyboard Table</h2>
+
+			<?php
+			// handle brands
+			if (isset($_POST['broptions']) && !empty($_POST['broptions'])) {
+				$selectedBrands = $_POST['broptions'];
+				$brands = implode(' OR ', $selectedBrands);
+			} else {
+				$brands = "brand IS NOT NULL";
+			}
+			// handle colours
+			if (isset($_POST['coptions']) && !empty($_POST['coptions'])) {
+				$selectedColours = $_POST['coptions'];
+				$colours = implode(' OR ', $selectedColours);
+			} else {
+				$colours = "colour IS NOT NULL";
+			}
+			// handle percentage
+			if (isset($_POST['pcoptions']) && !empty($_POST['pcoptions'])) {
+				$selectedPc = $_POST['pcoptions'];
+				$pc = implode(' OR ', $selectedPc);
+			} else {
+				$pc = "percentage <> 0";
+			}
+			// handle price
+			if (isset($_POST['proptions']) && !empty($_POST['proptions'])) {
+				$selectedPrice = $_POST['proptions'];
+				$price = implode(' OR ', $selectedPrice);
+			} else {
+				$price = "price <> 0";
+			}
+			
+			$sql = "SELECT * FROM Keyboard WHERE " . $brands . " AND " . $colours . " AND " . $pc . " AND " . $price;
+			$result = executePlainSQL($sql);
+			echo "<table border='5'>";
+			printCPUCoolerTable($result);
+			echo "</table>";
+
+			?>
+		</div>
+	</div>
+
+
+	<!-- <h2>Count the Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
 		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
 		<input type="submit" name="countTuples"></p>
@@ -200,7 +333,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	<form method="GET" action="template.php">
 		<input type="hidden" id="displayTuplesRequest" name="displayTuplesRequest">
 		<input type="submit" name="displayTuples"></p>
-	</form>
+	</form> -->
 
 
 	<?php
@@ -426,6 +559,26 @@ if (isset($_POST['resetTablesRequest'])) {
 		oci_commit($db_conn);
 	}
 
+	// function handleSelectRequest()
+	// {
+	// 	global $db_conn;
+
+	// 	//Getting the values select all that apply for brand
+	// 	// $tuple = array(
+	// 	// 	":bind1" => "brand = 'Corsair'"
+	// 	// );
+
+	// 	// $alltuples = array(
+	// 	// 	$tuple
+	// 	// );
+
+	// 	$result = executePlainSQL("SELECT * FROM Keyboard WHERE brand IS NOT NULL");
+	// 	echo "<table border='5'>";
+	// 	printCPUCoolerTable($result);
+	// 	echo "</table>";
+	// 	oci_commit($db_conn);
+	// }
+
 	function handleDisplayRequest()
 	{
 		global $db_conn;
@@ -446,6 +599,8 @@ if (isset($_POST['resetTablesRequest'])) {
 				handleInsertRequest();
 			} else if (array_key_exists('deleteQueryRequest', $_POST)) {
 				handleDeleteRequest();
+			} else if (array_key_exists('selectQueryRequest', $_POST)) {
+				handleSelectRequest();
 			}
 
 			disconnectFromDB();
@@ -467,7 +622,7 @@ if (isset($_POST['resetTablesRequest'])) {
 		}
 	}
 
-	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit'])) {
+	if (isset($_POST['reset']) || isset($_POST['updateSubmit']) || isset($_POST['insertSubmit']) || isset($_POST['selectSubmit'])) {
 		handlePOSTRequest();
 	} else if (isset($_GET['countTupleRequest']) || isset($_GET['displayTuplesRequest'])) {
 		handleGETRequest();
