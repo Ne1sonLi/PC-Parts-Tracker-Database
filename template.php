@@ -488,10 +488,30 @@ if (isset($_POST['resetTablesRequest'])) {
 		$old_cpu = $_POST['oldCPU'];
 		$new_cpu = $_POST['newCPU'];
 
+		if ($new_cpu && CPUDoesNotContain($new_cpu)) {
+			insertIntoCPUTable($new_cpu);
+		}
+
 		// you need the wrap the old name and new name values with single quotations
 		executePlainSQL("UPDATE CPUCooler_On SET price='" . $new_price . "' WHERE price='" . $old_price . "'");
 		executePlainSQL("UPDATE CPUCooler_On SET cpu_model='" . $new_cpu . "' WHERE cpu_model='" . $old_cpu . "'");
 		oci_commit($db_conn);
+	}
+
+	// returns true is new_cpu is not a key in CPU table, false otherwise
+	function CPUDoesNotContain($new_cpu)
+	{
+		global $db_conn;
+
+		$sql = "SELECT COUNT(*) FROM CPU_On WHERE Model = :bind1";
+
+        $sqlStatement = oci_parse($db_conn, $sql);
+        oci_bind_by_name($sqlStatement, ":bind1", $new_cpu);
+        oci_execute($sqlStatement, OCI_DEFAULT);
+
+        $count = oci_fetch_row($sqlStatement)[0];
+
+		return $count == 0; // true if primary key does not exist
 	}
 
 	function handleResetRequest()
