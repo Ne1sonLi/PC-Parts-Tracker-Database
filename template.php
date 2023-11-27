@@ -114,6 +114,7 @@ if (isset($_POST['resetTablesRequest'])) {
 			<hr />
 			<h2>Insert Values into CPU Cooler Table</h2>
 			<p>This will insert a new row into the currect CPU Cooler Table. (*) fields must be entered.</p>
+			<p>NOTE: CPUCooler_Size must be an integer and Price must be a number!</p>
 			<form method="POST" action="wrapper.php">
 				<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 				Model (*): <input type="text" name="insModel"> <br /><br />
