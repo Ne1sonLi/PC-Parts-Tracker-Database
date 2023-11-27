@@ -114,6 +114,7 @@ if (isset($_POST['resetTablesRequest'])) {
 			<hr />
 			<h2>Insert Values into CPU Cooler Table</h2>
 			<p>This will insert a new row into the currect CPU Cooler Table. (*) fields must be entered.</p>
+			<p>NOTE: CPUCooler_Size must be an integer and Price must be a number!</p>
 			<form method="POST" action="wrapper.php">
 				<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 				Model (*): <input type="text" name="insModel"> <br /><br />
@@ -128,12 +129,13 @@ if (isset($_POST['resetTablesRequest'])) {
 
 		<div class="form-section">
 			<hr />
-			<h2>Delete Row in CPU Cooler Table</h2>
-			<p>This delete a row in the CPU Cooler Table. Specify the row by stating its Model and Size.</p>
+			<h2>Delete Row in CPU Table</h2>
+			<p>This deletes a row in the CPU Table. Specify the row by stating its Model.</p>
+			<p>WARNING: Deleting a row here might delete a row in the CPU Cooler table!</p>
 			<form method="POST" action="wrapper.php">
 				<input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
 				Model : <input type="text" name="delModel"> <br /><br />
-				CPUCooler_Size : <input type="text" name="delCoolerSize"> <br /><br />
+				<!-- CPUCooler_Size : <input type="text" name="delCoolerSize"> <br /><br /> -->
 
 				<input type="submit" value="Delete" name="deleteSubmit"></p>
 			</form>
@@ -435,18 +437,18 @@ if (isset($_POST['resetTablesRequest'])) {
 	}
 
 
-	function printResult($result)
-	{ //prints results from a select statement
-		echo "<br>Retrieved data from table demoTable:<br>";
-		echo "<table>";
-		echo "<tr><th>ID</th><th>Name</th></tr>";
+	// function printResult($result)
+	// { //prints results from a select statement
+	// 	echo "<br>Retrieved data from table demoTable:<br>";
+	// 	echo "<table>";
+	// 	echo "<tr><th>ID</th><th>Name</th></tr>";
 
-		while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-			echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
-		}
+	// 	while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
+	// 		echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
+	// 	}
 
-		echo "</table>";
-	}
+	// 	echo "</table>";
+	// }
 
 	function connectToDB()
 	{
@@ -486,10 +488,30 @@ if (isset($_POST['resetTablesRequest'])) {
 		$old_cpu = $_POST['oldCPU'];
 		$new_cpu = $_POST['newCPU'];
 
+		if ($new_cpu && CPUDoesNotContain($new_cpu)) {
+			insertIntoCPUTable($new_cpu);
+		}
+
 		// you need the wrap the old name and new name values with single quotations
 		executePlainSQL("UPDATE CPUCooler_On SET price='" . $new_price . "' WHERE price='" . $old_price . "'");
 		executePlainSQL("UPDATE CPUCooler_On SET cpu_model='" . $new_cpu . "' WHERE cpu_model='" . $old_cpu . "'");
 		oci_commit($db_conn);
+	}
+
+	// returns true is new_cpu is not a key in CPU table, false otherwise
+	function CPUDoesNotContain($new_cpu)
+	{
+		global $db_conn;
+
+		$sql = "SELECT COUNT(*) FROM CPU_On WHERE Model = :bind1";
+
+        $sqlStatement = oci_parse($db_conn, $sql);
+        oci_bind_by_name($sqlStatement, ":bind1", $new_cpu);
+        oci_execute($sqlStatement, OCI_DEFAULT);
+
+        $count = oci_fetch_row($sqlStatement)[0];
+
+		return $count == 0; // true if primary key does not exist
 	}
 
 	function handleResetRequest()
@@ -530,7 +552,13 @@ if (isset($_POST['resetTablesRequest'])) {
 	{
 		global $db_conn;
 
-		//Getting the values from user and insert data into the table
+		// Add tuple into CPU Model table first
+		if ($_POST['insCPUModel']) {
+			$CPUModel = $_POST['insCPUModel'];
+			insertIntoCPUTable($CPUModel);
+		}
+
+		// Getting the values from user and insert data into the table
 		$tuple = array(
 			":bind1" => $_POST['insModel'],
 			":bind2" => $_POST['insCoolerSize'],
@@ -546,6 +574,21 @@ if (isset($_POST['resetTablesRequest'])) {
 		oci_commit($db_conn);
 	}
 
+	function insertIntoCPUTable($CPUModel)
+	{
+		global $db_conn;
+
+		$sql = "INSERT INTO CPU_On (Model) VALUES ('" . $CPUModel . "')";
+		$success = oci_execute(oci_parse($db_conn, $sql), OCI_DEFAULT);
+
+        if ($success) {
+            oci_commit($db_conn);
+            echo "Model successfully added into CPU table.";
+        } else {
+            echo "Error adding model to CPU.";
+        }
+	}
+
 	function handleDeleteRequest()
 	{
 		global $db_conn;
@@ -553,14 +596,15 @@ if (isset($_POST['resetTablesRequest'])) {
 		//Getting the values from user and delete data from table
 		$tuple = array(
 			":bind1" => $_POST['delModel'],
-			":bind2" => $_POST['delCoolerSize']
+			// ":bind2" => $_POST['delCoolerSize']
 		);
 
 		$alltuples = array(
 			$tuple
 		);
 
-		executeBoundSQL("delete from CPUCooler_On WHERE model = :bind1 AND cpucooler_size = :bind2", $alltuples);
+		// executeBoundSQL("delete from CPUCooler_On WHERE model = :bind1 AND cpucooler_size = :bind2", $alltuples);
+		executeBoundSQL("delete from CPU_On WHERE model = :bind1", $alltuples);
 		oci_commit($db_conn);
 	}
 
