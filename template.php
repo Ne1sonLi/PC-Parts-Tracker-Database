@@ -65,6 +65,9 @@ if (isset($_POST['resetTablesRequest'])) {
 	// The select/filter button was clicked, call the selectQueryRequest function
 	handleSelectRequest();
 	// echo "Filtered";
+} elseif (isset($_POST['ProjectionQueryRequest'])) {
+	// The projection button was clicked, call the selectQueryRequest function
+	handleProjectionRequest();
 } elseif (isset($_POST['countTupleRequest'])) {
 	// The count button was clicked, call the handleCountRequest function
 	handleCountRequest();
@@ -326,6 +329,71 @@ if (isset($_POST['resetTablesRequest'])) {
 			?>
 		</div>
 	</div>
+
+	<div class ="projection">
+
+		<div class="table-continer">
+		<h2>Project a Mouse</h2>
+			<form method="post" action="">
+    <input type="checkbox" name="projectBrand" value="brand"> Brand
+    <input type="checkbox" name="projectModel" value="model"> Model
+    <input type="checkbox" name="projectColour" value="colour"> Colour
+    <input type="checkbox" name="projectSize" value="mouse_size"> Size
+    <input type="checkbox" name="projectWeight" value="weight"> Weight
+	<input type="checkbox" name="projectPrice" value="price"> Price
+	<input type="checkbox" name="projectWiredWireless" value="wired_wireless"> Wired_Wireless
+    <input type="submit" value="Submit">
+		</form>
+
+		<h2>Filtered Mouse Table</h2>
+
+		<?php
+
+		$selectedColumns = [];
+
+		// Check if each checkbox is selected and add the corresponding column to the array
+		if (isset($_POST['projectBrand'])) {
+			$selectedColumns[] = 'brand';
+		}
+		if (isset($_POST['projectModel'])) {
+			$selectedColumns[] = 'model';
+		}
+		if (isset($_POST['projectColour'])) {
+			$selectedColumns[] = 'colour';
+		}
+		if (isset($_POST['projectSize'])) {
+			$selectedColumns[] = 'mouse_size';
+		}
+		if (isset($_POST['projectWeight'])) {
+			$selectedColumns[] = 'weight';
+		}
+		if (isset($_POST['projectPrice'])) {
+			$selectedColumns[] = 'price';
+		}
+		if (isset($_POST['projectWiredWireless'])) {
+			$selectedColumns[] = 'wired_wireless';
+		}
+		
+		// Construct the SELECT part of the SQL query
+		$selectPart = implode(', ', $selectedColumns);
+		
+		
+		// Use prepared statements to prevent SQL injection
+		$sql = "SELECT $selectPart FROM Mouse";
+		
+		$result = executePlainSQL($sql);
+		
+		echo "<table border='5'>";
+		printCPUCoolerTable($result);
+		echo "</table>";
+
+
+
+
+?>
+		</div>
+	</div>
+		
 
 
 	<!-- <h2>Count the Tuples in DemoTable</h2>
@@ -628,6 +696,71 @@ if (isset($_POST['resetTablesRequest'])) {
 	// 	oci_commit($db_conn);
 	// }
 
+// 	function handleProjectionRequest() {
+// 		global $db_conn;
+
+// 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
+// 			// Get selected columns from the form
+// 			$selectedColumns = [];
+// 			if (isset($_POST['projectBrand'])) {
+// 				$selectedColumns[] = "brand";
+// 			}
+// 			if (isset($_POST['projectModel'])) {
+// 				$selectedColumns[] = "model";
+// 			}
+// 			if (isset($_POST['projectColour'])) {
+// 				$selectedColumns[] = "colour";
+// 			}
+// 			if (isset($_POST['projectWeight'])) {
+// 				$selectedColumns[] = "weight";
+// 			}
+// 			// Add more conditions for other columns
+		
+// 			// Construct the SELECT query with the selected columns
+// 			$query = "SELECT " . implode(", ", $selectedColumns) . " FROM Keyboard WHERE brand IS NOT NULL";
+		
+// 			// Execute the query
+// 			$result = executePlainSQL($query); // You need to define executePlainSQL function
+		
+// 			// Display the results in an HTML table
+// 			echo "<table border='5'>";
+// 			printProjectionTable($result); // You need to define printProjectionTable function
+// 			echo "</table>";
+		
+// 			// Commit the changes (assuming you are using Oracle OCI)
+// 			oci_commit($db_conn);
+// 		}
+		
+// 		// Example of a simple executePlainSQL function (you need to replace it with your actual implementation)
+// 		function executePlainSQL($query) {
+// 			global $db_conn;
+		
+// 			$stmt = oci_parse($db_conn, $query);
+// 			oci_execute($stmt);
+		
+// 			return $stmt;
+// 	}
+// }
+
+// function printProjectionTable($result) {
+//     // Print table headers
+//     echo "<tr>";
+//     for ($i = 1; $i <= oci_num_fields($result); $i++) {
+//         $col_name = oci_field_name($result, $i);
+//         echo "<th>$col_name</th>";
+//     }
+//     echo "</tr>";
+
+//     // Print table rows
+//     while ($row = oci_fetch_assoc($result)) {
+//         echo "<tr>";
+//         foreach ($row as $value) {
+//             echo "<td>$value</td>";
+//         }
+//         echo "</tr>";
+//     }
+// }
+
 	function handleDisplayRequest()
 	{
 		global $db_conn;
@@ -650,6 +783,8 @@ if (isset($_POST['resetTablesRequest'])) {
 				handleDeleteRequest();
 			} else if (array_key_exists('selectQueryRequest', $_POST)) {
 				handleSelectRequest();
+			} else if (array_key_exists('projectionQueryRequest', $_POST)) {
+				handleProjectionRequest();
 			}
 
 			disconnectFromDB();
