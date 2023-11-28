@@ -331,84 +331,89 @@ if (isset($_POST['resetTablesRequest'])) {
 		</div>
 	</div>
 
-	<div class ="projection">
+
+<div>
+	<h1>Projection</h1>
+
+<?php
+
+$tableQuery = "SELECT table_name FROM user_tables";
+$tableResult = executePlainSQL($tableQuery);
+
+if ($tableResult) {
+    echo '<form action="" method="post">';
+    echo '<label for="tableDropdown">Select a table:</label>';
+    echo '<select id="tableDropdown" name="selectedTable">';
+    
+    while ($tableRow = oci_fetch_assoc($tableResult)) {
+        $tableName = $tableRow['TABLE_NAME'];
+        echo '<option value="' . $tableName . '">' . $tableName . '</option>';
+    }
+
+    echo '</select>';
+
+    echo '<input type="submit" value="Show Columns">';
+    echo '</form>';
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $selectedTable = $_POST["selectedTable"];
+
+    $columnQuery = "SELECT column_name FROM user_tab_columns WHERE table_name = '$selectedTable'";
+    $columnResult = executePlainSQL($columnQuery);
+
+    if ($columnResult) {
+        echo "<h2>$selectedTable attributes:</h2>";
+        echo '<form action="" method="post">';
+        
+        while ($columnRow = oci_fetch_assoc($columnResult)) {
+            $columnName = $columnRow['COLUMN_NAME'];
+            echo '<input type="checkbox" name="selectedColumns[]" value="' . $columnName . '">';
+            echo '<label for="' . $columnName . '">' . $columnName . '</label><br>';
+        }
+		//store selectedTable value for after submit
+		echo '<input type="hidden" name="hiddenSelectedTable" value="' . $selectedTable . '">';
+
+        echo '<input type="submit" value="Submit">';
+        echo '</form>';
+
+		if (isset($_POST["selectedColumns"]) && is_array($_POST["selectedColumns"])) {
+            $selectedColumns = $_POST["selectedColumns"];
+			$selectedTable = $_POST["hiddenSelectedTable"];
+
+            $columnsString = implode(", ", $selectedColumns);
+
+            $projectionQuery = "SELECT $columnsString FROM $selectedTable";
+            $projectionResult = executePlainSQL($projectionQuery);
+
+			echo "<table border='5'>";
+			printCPUCoolerTable($projectionResult);
+			echo "</table>";
+			
+        } else {
+			$table = "SELECT * FROM $selectedTable";
+			$tableResult = executePlainSQL($table);
+
+			echo "<table border='5'>";
+			printCPUCoolerTable($tableResult);
+			echo "</table>";
+            echo "<p>No columns selected yet</p>";
+        }
 
 
-       <div class="table-continer">
-       <h2>Project a Mouse</h2>
-           <form method="post" action="">
-   <input type="checkbox" name="projectBrand" value="brand"> Brand
-   <input type="checkbox" name="projectModel" value="model"> Model
-   <input type="checkbox" name="projectColour" value="colour"> Colour
-   <input type="checkbox" name="projectSize" value="mouse_size"> Size
-   <input type="checkbox" name="projectWeight" value="weight"> Weight
-   <input type="checkbox" name="projectPrice" value="price"> Price
-   <input type="checkbox" name="projectWiredWireless" value="wired_wireless"> Wired_Wireless
-   <input type="submit" value="Submit">
-       </form>
+    } else {
+        echo "<p>Error getting columns for table $selectedTable</p>";
+    }
 
+}
 
-       <h2>Filtered Mouse Table</h2>
+oci_close($db_conn);
 
+		?>
 
-       <?php
-
-
-       $selectedColumns = [];
-
-
-       // Check if each checkbox is selected and add the corresponding column to the array
-       if (isset($_POST['projectBrand'])) {
-           $selectedColumns[] = 'brand';
-       }
-       if (isset($_POST['projectModel'])) {
-           $selectedColumns[] = 'model';
-       }
-       if (isset($_POST['projectColour'])) {
-           $selectedColumns[] = 'colour';
-       }
-       if (isset($_POST['projectSize'])) {
-           $selectedColumns[] = 'mouse_size';
-       }
-       if (isset($_POST['projectWeight'])) {
-           $selectedColumns[] = 'weight';
-       }
-       if (isset($_POST['projectPrice'])) {
-           $selectedColumns[] = 'price';
-       }
-       if (isset($_POST['projectWiredWireless'])) {
-           $selectedColumns[] = 'wired_wireless';
-       }
-      
-	   //starting with full table when none selected
-	   if (empty($selectedColumns)) {
-		$selectedColumns[] = '*'; // '*' means select all columns
-		}
-
-       // Construct the SELECT part of the SQL query
-       $selectPart = implode(', ', $selectedColumns);
-      
-      
-       // Use prepared statements to prevent SQL injection
-       $sql = "SELECT $selectPart FROM Mouse";
-      
-       $result = executePlainSQL($sql);
-      
-       echo "<table border='5'>";
-       printCPUCoolerTable($result);
-       echo "</table>";
-
-
-
-
-
-
-
-
-?>
-       </div>
-   </div>
-
+		</body>
+	</html>
+</div>
 
 	<!-- <h2>Count the Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
