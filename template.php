@@ -380,6 +380,11 @@ if (isset($_POST['resetTablesRequest'])) {
            $selectedColumns[] = 'wired_wireless';
        }
       
+	   //starting with full table when none selected
+	   if (empty($selectedColumns)) {
+		$selectedColumns[] = '*'; // '*' means select all columns
+		}
+
        // Construct the SELECT part of the SQL query
        $selectPart = implode(', ', $selectedColumns);
       
