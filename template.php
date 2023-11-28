@@ -415,6 +415,65 @@ oci_close($db_conn);
 	</html>
 </div>
 
+
+
+<div>
+	<h1>Aggregation with Group By</h1>
+	<p>Price of a GPU</p>
+
+	<div>
+		<form method="post" action="">
+    		<input type="checkbox" name="groupBrand" value="brand"> Brand
+    		<input type="checkbox" name="groupFans" value="fans"> Number of Fans
+
+    		<label for="operation">Select an operation:</label>
+    		<select name="operation" id="operation">
+        		<option value="MAX">Max</option>
+        		<option value="MIN">Min</option>
+        		<option value="AVG">Avg</option>
+    		</select>
+
+    		<input type="submit" value="Submit">
+		</form>
+	</div>
+
+
+	<?php
+	echo"<h2>GPU_Has_Price</h2>";
+	$priceTableSql = "SELECT * FROM GPU_Has_Price";
+	$fullTableResult = executePlainSQL($priceTableSql);
+	echo "<table border='5'>";
+		printCPUCoolerTable($fullTableResult);
+	echo "</table>";
+
+	$selected = [];
+
+	if (isset($_POST['groupBrand'])) {
+		$selected[] = 'brand';
+	}
+	if (isset($_POST['groupFans'])) {
+		$selected[] = 'fans';
+	}
+
+	$operation = $_POST["operation"];
+
+
+	$groupedBy = implode(', ', $selected);
+
+	$groupBySql = "SELECT $groupedBy ". ", " . $operation . "(price)" . " FROM GPU_Has_Price GROUP BY $groupedBy" ;
+	$groupedByResult = executePlainSQL($groupBySql);
+
+	echo "<table border='5'>";
+	printCPUCoolerTable($groupedByResult);
+echo "</table>";
+
+	echo "$groupBySql";
+	?>
+
+
+
+</div>
+
 	<!-- <h2>Count the Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
 		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
