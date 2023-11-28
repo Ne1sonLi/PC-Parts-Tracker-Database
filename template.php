@@ -404,12 +404,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } else {
         echo "<p>Error getting columns for table $selectedTable</p>";
     }
-
 }
+
+
+
+
 
 oci_close($db_conn);
 
 		?>
+
+<div>
+	<h2>Query with Having</h2>
+	<p>The following query will group by the the case fans colour and print out a table where the colour has an average price less than your given input.</p>
+	<form method="POST" action="wrapper.php">
+		<input type="hidden" id="havingQueryRequest" name="havingQueryRequest">
+		Price Lower than: <input type="text" name="havingPrice"> <br /><br />
+
+		<input type="submit" value="Query" name="havingQuerySubmit"></p>
+	</form>
+
+	<h2>CaseFan Table</h2>
+
+	<?php
+	$sql = "SELECT * FROM CaseFan_Inside";
+	$result = executePlainSQL($sql);
+	echo "<table border='5'>";
+	printCPUCoolerTable($result);
+	echo "</table>";
+
+	if (isset($_POST['havingQueryRequest']) && isset($_POST['havingPrice'])) {
+		$avgPrice = $_POST['havingPrice'];
+		echo "<h2>Having Result Table</h2>";
+		$havingSql = "SELECT Colour, AVG(Price) FROM CaseFan_Inside GROUP BY Colour HAVING AVG(Price) < $avgPrice";
+		$havingResult = executePlainSQL($havingSql);
+		echo "<table border='5'>";
+		printCPUCoolerTable($havingResult);
+		echo "</table>";
+	}
+	?>
+</div>
 
 		</body>
 	</html>
