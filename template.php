@@ -65,6 +65,10 @@ if (isset($_POST['resetTablesRequest'])) {
 	// The select/filter button was clicked, call the selectQueryRequest function
 	handleSelectRequest();
 	// echo "Filtered";
+} elseif (isset($_POST['projectionQueryRequest'])) {
+	// The select/filter button was clicked, call the projectionQueryRequest function
+	handleProjectionRequest();
+	// echo "Filtered";
 } elseif (isset($_POST['countTupleRequest'])) {
 	// The count button was clicked, call the handleCountRequest function
 	handleCountRequest();
@@ -326,6 +330,79 @@ if (isset($_POST['resetTablesRequest'])) {
 			?>
 		</div>
 	</div>
+
+	<div class ="projection">
+
+
+       <div class="table-continer">
+       <h2>Project a Mouse</h2>
+           <form method="post" action="">
+   <input type="checkbox" name="projectBrand" value="brand"> Brand
+   <input type="checkbox" name="projectModel" value="model"> Model
+   <input type="checkbox" name="projectColour" value="colour"> Colour
+   <input type="checkbox" name="projectSize" value="mouse_size"> Size
+   <input type="checkbox" name="projectWeight" value="weight"> Weight
+   <input type="checkbox" name="projectPrice" value="price"> Price
+   <input type="checkbox" name="projectWiredWireless" value="wired_wireless"> Wired_Wireless
+   <input type="submit" value="Submit">
+       </form>
+
+
+       <h2>Filtered Mouse Table</h2>
+
+
+       <?php
+
+
+       $selectedColumns = [];
+
+
+       // Check if each checkbox is selected and add the corresponding column to the array
+       if (isset($_POST['projectBrand'])) {
+           $selectedColumns[] = 'brand';
+       }
+       if (isset($_POST['projectModel'])) {
+           $selectedColumns[] = 'model';
+       }
+       if (isset($_POST['projectColour'])) {
+           $selectedColumns[] = 'colour';
+       }
+       if (isset($_POST['projectSize'])) {
+           $selectedColumns[] = 'mouse_size';
+       }
+       if (isset($_POST['projectWeight'])) {
+           $selectedColumns[] = 'weight';
+       }
+       if (isset($_POST['projectPrice'])) {
+           $selectedColumns[] = 'price';
+       }
+       if (isset($_POST['projectWiredWireless'])) {
+           $selectedColumns[] = 'wired_wireless';
+       }
+      
+       // Construct the SELECT part of the SQL query
+       $selectPart = implode(', ', $selectedColumns);
+      
+      
+       // Use prepared statements to prevent SQL injection
+       $sql = "SELECT $selectPart FROM Mouse";
+      
+       $result = executePlainSQL($sql);
+      
+       echo "<table border='5'>";
+       printCPUCoolerTable($result);
+       echo "</table>";
+
+
+
+
+
+
+
+
+?>
+       </div>
+   </div>
 
 
 	<!-- <h2>Count the Tuples in DemoTable</h2>
