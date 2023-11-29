@@ -424,7 +424,6 @@ oci_close($db_conn);
 
 				<input type="submit" value="Join" name="joinSubmit"></p>
 				</form>
-				<hr />
 			</div>
 		</div>
 	</div>
@@ -470,6 +469,7 @@ oci_close($db_conn);
 			?>
 		</div>
 	</div>
+	<hr>
 
 
 

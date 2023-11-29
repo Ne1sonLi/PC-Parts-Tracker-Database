@@ -242,7 +242,6 @@ CREATE TABLE CaseFan_Inside(
   Case_Colour	  VARCHAR(100),
   Case_Size	    VARCHAR(100),
   PRIMARY KEY (Model, CaseFan_Size),
-  UNIQUE (Case_Model, Case_Colour, Case_Size),
   FOREIGN KEY (Case_Model, Case_Colour, Case_Size) REFERENCES Case_Contains (Model, Colour, Case_Size) ON DELETE CASCADE
 );
 
@@ -387,7 +386,8 @@ INSERT INTO Case_Contains_Brand values('Corsair 4000D CC-9011200-WW', 'Corsair')
 INSERT INTO Case_Contains_Brand values('Corsair 4000D CC-9011201-WW', 'Corsair');
 INSERT INTO Case_Contains_Brand values('Corsair iCUE 4000X RGB CC-9011204-WW', 'Corsair');
 INSERT INTO Case_Contains_Brand values('Corsair iCUE 4000X RGB CC-9011205-WW', 'Corsair');
-INSERT INTO Case_Contains_Brand values('Corsair 5000D CC-9011210-WW', 'Corsair');
+INSERT INTO Case_Contains_Brand values('DeepCool CC560 Mid-Tower ATX', 'DeepCool');
+INSERT INTO Case_Contains_Brand values('Thermaltake Versa H17', 'Thermaltake');
 
 INSERT INTO Mouse values('G305 LIGHTSPEED', 'Black', 'Logitech', 'Standard', 99, 49.99, 'Wireless');
 INSERT INTO Mouse values('G502 HERO', 'Black', 'Logitech', 'Standard', 89, 79.99, 'Wired');
@@ -448,13 +448,14 @@ INSERT INTO Case_Contains values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-To
 INSERT INTO Case_Contains values('Corsair 4000D CC-9011201-WW', 'White', 'Mid-Tower', 119.99);
 INSERT INTO Case_Contains values('Corsair iCUE 4000X RGB CC-9011204-WW', 'Black', 'Mid-Tower', 159.99);
 INSERT INTO Case_Contains values('Corsair iCUE 4000X RGB CC-9011205-WW', 'White', 'Mid-Tower', 189.99);
-INSERT INTO Case_Contains values('Corsair 5000D CC-9011210-WW', 'Black', 'Mid-Tower', 204.99);
+INSERT INTO Case_Contains values('DeepCool CC560 Mid-Tower ATX', 'Black', 'Mid-Tower', 99.99);
+INSERT INTO Case_Contains values('Thermaltake Versa H17', 'Black', 'Mini-Tower', 64.99);
 
-INSERT INTO PowerSupply_In values('RM750e', 'Full', 'ATX', 100, null, null, null);
-INSERT INTO PowerSupply_In values('RM1000x', 'Full', 'ATX', 170, null, null, null);
-INSERT INTO PowerSupply_In values('ToughPower GX2', 'Semi', 'ATX', 65, null, null, null);
-INSERT INTO PowerSupply_In values('CX650M', 'Semi', 'ATX', 70, null, null, null);
-INSERT INTO PowerSupply_In values('RM1000e', 'Full', 'ATX', 160, null, null, null);
+INSERT INTO PowerSupply_In values('RM750e', 'Full', 'ATX', 100, 'Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower');
+INSERT INTO PowerSupply_In values('RM1000x', 'Full', 'ATX', 170, 'Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower');
+INSERT INTO PowerSupply_In values('ToughPower GX2', 'Semi', 'ATX', 65, 'Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower');
+INSERT INTO PowerSupply_In values('CX650M', 'Semi', 'ATX', 70, 'Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower');
+INSERT INTO PowerSupply_In values('RM1000e', 'Full', 'ATX', 160, 'Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower');
 
 INSERT INTO Motherboard_Powers values('Pro Z690-A', 'ATX', 'Pro Z Series', 'No', 'MSI', 50, null, 299.99, 4, 'DDR4', 3,  'Full', 'ATX', 'RM750e', null, null, null);
 INSERT INTO Motherboard_Powers values('Prime B660M-A D4', 'mATX', 'Prime B660M-A D4', 'No', 'ASUS', 50, null, 169.99, 2, 'DDR4', 3,  'Full', 'ATX', 'RM1000x', null, null, null);
@@ -474,16 +475,16 @@ INSERT INTO CPUCooler_On values('DeepCool GAMMAXX AG400 WH ARGB', 120, 39.99, nu
 INSERT INTO CPUCooler_On values('DeepCool GAMMAXX CT', 120, 49.99, null);
 INSERT INTO CPUCooler_On values('Corsair iCUE H150i Elite CAPELLIX XT', 360, 284.99, null);
 
-INSERT INTO CaseFan_Inside values('Noctua NF-P12 Redux', 120, 15.95, 'grey', null, null, null);
-INSERT INTO CaseFan_Inside values('Noctua NF-A20 PWM', 200, 39.64, 'brown', null, null, null);
-INSERT INTO CaseFan_Inside values('Corsair iCUE QL120', 120, 44.99,'black', null, null, null);
-INSERT INTO CaseFan_Inside values('Corsair iCUE QL140', 140, 49.99,'black', null, null, null);
-INSERT INTO CaseFan_Inside values('Corsair LL Series LL120', 120, 25.99, 'black',  null, null, null);
-INSERT INTO CaseFan_Inside values('Corsair iCUE AR120', 120, 21.74, 'black',  null, null, null);
-INSERT INTO CaseFan_Inside values('Corsair iCUE SP120', 120, 44.99, 'white',  null, null, null);
-INSERT INTO CaseFan_Inside values('Corsair SP120 Elite', 120, 14.99, 'black',  null, null, null);
-INSERT INTO CaseFan_Inside values('Thermalright TL-C12CW-S', 120, 17.90, 'white',  null, null, null);
-INSERT INTO CaseFan_Inside values('Arctic F12 PWM', 120, 15.99, 'white',  null, null, null);
+INSERT INTO CaseFan_Inside values('Noctua NF-P12 Redux', 120, 15.95, 'grey', 'Corsair 4000D CC-9011201-WW', 'White', 'Mid-Tower');
+INSERT INTO CaseFan_Inside values('Noctua NF-A20 PWM', 200, 39.64, 'brown', 'Corsair 4000D CC-9011201-WW', 'White', 'Mid-Tower');
+INSERT INTO CaseFan_Inside values('Corsair iCUE QL120', 120, 44.99,'black', 'Corsair 4000D CC-9011201-WW', 'White', 'Mid-Tower');
+INSERT INTO CaseFan_Inside values('Corsair iCUE QL140', 140, 49.99,'black', 'DeepCool CC560 Mid-Tower ATX', 'Black', 'Mid-Tower');
+INSERT INTO CaseFan_Inside values('Corsair LL Series LL120', 120, 25.99, 'black',  'Thermaltake Versa H17', 'Black', 'Mini-Tower');
+INSERT INTO CaseFan_Inside values('Corsair iCUE AR120', 120, 21.74, 'black',  'DeepCool CC560 Mid-Tower ATX', 'Black', 'Mid-Tower');
+INSERT INTO CaseFan_Inside values('Corsair iCUE SP120', 120, 44.99, 'white',  'Corsair 4000D CC-9011201-WW', 'White', 'Mid-Tower');
+INSERT INTO CaseFan_Inside values('Corsair SP120 Elite', 120, 14.99, 'black',  'Thermaltake Versa H17', 'Black', 'Mini-Tower');
+INSERT INTO CaseFan_Inside values('Thermalright TL-C12CW-S', 120, 17.90, 'white',  'DeepCool CC560 Mid-Tower ATX', 'Black', 'Mid-Tower');
+INSERT INTO CaseFan_Inside values('Arctic F12 PWM', 120, 15.99, 'white', 'Thermaltake Versa H17', 'Black', 'Mini-Tower');
 
 INSERT INTO Storage_Requires values('IronWolf Pro 12', 12, 'SATA', 'HDD', '3.5 Inch', 9, null, null, null, null);
 INSERT INTO Storage_Requires values('WD Read Plus', 6, 'SATA', 'HDD', '3.5 Inch', 9, null, null, null, null);
