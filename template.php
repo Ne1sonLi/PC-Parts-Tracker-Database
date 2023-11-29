@@ -544,7 +544,7 @@ echo "</table>";
 	<h2>CaseFan Table</h2>
 
 	<?php
-	$sql = "SELECT * FROM CaseFan_Inside";
+	$sql = "SELECT Model, CaseFan_Size, Price, Colour FROM CaseFan_Inside";
 	$result = executePlainSQL($sql);
 	echo "<table border='5'>";
 	printCPUCoolerTable($result);
