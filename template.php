@@ -471,12 +471,69 @@ oci_close($db_conn);
 		</div>
 	</div>
 
+	<div>
+		<hr/>
+	<h1>Aggregation with Group By</h1>
+	<p>Price of a GPU</p>
+
+	<div>
+		<form method="post" action="">
+    		<input type="checkbox" name="groupBrand" value="brand"> Brand
+    		<input type="checkbox" name="groupFans" value="fans"> Number of Fans
+
+    		<label for="operation">Select an operation:</label>
+    		<select name="operation" id="operation">
+        		<option value="MAX">Max</option>
+        		<option value="MIN">Min</option>
+        		<option value="AVG">Avg</option>
+    		</select>
+
+    		<input type="submit" value="Submit">
+		</form>
+	</div>
+
+
+	<?php
+	echo"<h2>GPU_Has_Price</h2>";
+	$priceTableSql = "SELECT * FROM GPU_Has_Price";
+	$fullTableResult = executePlainSQL($priceTableSql);
+	echo "<table border='5'>";
+		printCPUCoolerTable($fullTableResult);
+	echo "</table>";
+
+	$selected = [];
+
+	if (isset($_POST['groupBrand'])) {
+		$selected[] = 'brand';
+	}
+	if (isset($_POST['groupFans'])) {
+		$selected[] = 'fans';
+	}
+
+	$operation = $_POST["operation"];
+
+
+	$groupedBy = implode(', ', $selected);
+
+	$groupBySql = "SELECT $groupedBy ". ", " . $operation . "(price)" . " FROM GPU_Has_Price GROUP BY $groupedBy" ;
+	$groupedByResult = executePlainSQL($groupBySql);
+
+	echo "<table border='5'>";
+	printCPUCoolerTable($groupedByResult);
+echo "</table>";
+
+	echo "$groupBySql";
+	?>
+
+
+<hr/>
+</div>
 
 
 
 <div>
 	<h2>Query with Having</h2>
-	<p>The following query will group by the the case fans colour and print out a table where the colour has an average price less than your given input.</p>
+	<p>The following query will group by the case fans colour and print out a table where the colour has an average price less than your given input.</p>
 	<form method="POST" action="wrapper.php">
 		<input type="hidden" id="havingQueryRequest" name="havingQueryRequest">
 		Price Lower than: <input type="text" name="havingPrice"> <br /><br />
@@ -503,13 +560,46 @@ oci_close($db_conn);
 		echo "</table>";
 	}
 	?>
+	<hr/>
+</div>
+
+<div>
+	<h2>Nested Query</h2>
+	<p>The following query will group the keyboards by your choosen input(s) and print out a table where the group has an average price less than the average price of all the keyboards.</p>
+	<form method="POST" action="wrapper.php">
+		<input type="hidden" id="nestedQueryRequest" name="nestedQueryRequest">
+		Price Lower than: <input type="text" name="havingPrice"> <br /><br />
+
+		<input type="submit" value="Query" name="havingQuerySubmit"></p>
+	</form>
+
+	<h2>Keyboard Table</h2>
+
+	<?php
+	$sql = "SELECT * FROM Keyboard";
+	$result = executePlainSQL($sql);
+	echo "<table border='5'>";
+	printCPUCoolerTable($result);
+	echo "</table>";
+
+	if (isset($_POST['havingQueryRequest']) && isset($_POST['havingPrice'])) {
+		$avgPrice = $_POST['havingPrice'];
+		echo "<h2>Having Result Table</h2>";
+		$havingSql = "SELECT Colour, AVG(Price) FROM CaseFan_Inside GROUP BY Colour HAVING AVG(Price) < $avgPrice";
+		$havingResult = executePlainSQL($havingSql);
+		echo "<table border='5'>";
+		printCPUCoolerTable($havingResult);
+		echo "</table>";
+	}
+	?>
+	<hr/>
 </div>
 
 		</body>
 	</html>
 </div>
 
-
+<!-- 
 
 <div>
 	<h1>Aggregation with Group By</h1>
@@ -564,9 +654,7 @@ echo "</table>";
 	echo "$groupBySql";
 	?>
 
-
-
-</div>
+</div> -->
 
 	<!-- <h2>Count the Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">
