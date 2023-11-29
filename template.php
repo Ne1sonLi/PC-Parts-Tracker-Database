@@ -321,7 +321,7 @@ if (isset($_POST['resetTablesRequest'])) {
 			}
 			
 			$sql = "SELECT * FROM Keyboard WHERE " . $brands . " AND " . $colours . " AND " . $pc . " AND " . $price;
-			echo $sql;
+			// echo $sql;
 			$result = executePlainSQL($sql);
 			echo "<table border='5'>";
 			printCPUCoolerTable($result);
@@ -615,7 +615,6 @@ echo "</table>";
 			echo "</tr>";
 		}
 	}
-
 
 	// function printResult($result)
 	// { //prints results from a select statement
