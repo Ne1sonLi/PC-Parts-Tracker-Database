@@ -538,7 +538,7 @@ echo "</table>";
 		<input type="hidden" id="havingQueryRequest" name="havingQueryRequest">
 		Price Lower than: <input type="text" name="havingPrice"> <br /><br />
 
-		<input type="submit" value="Query" name="havingQuerySubmit"></p>
+		<input type="submit" value="Submit" name="havingQuerySubmit"></p>
 	</form>
 
 	<h2>CaseFan Table</h2>
@@ -563,14 +563,22 @@ echo "</table>";
 	<hr/>
 </div>
 
+
+
+
+
+
+<!-- NELSON WORKING HERE -->
 <div>
 	<h2>Nested Query</h2>
 	<p>The following query will group the keyboards by your choosen input(s) and print out a table where the group has an average price less than the average price of all the keyboards.</p>
 	<form method="POST" action="wrapper.php">
 		<input type="hidden" id="nestedQueryRequest" name="nestedQueryRequest">
-		Price Lower than: <input type="text" name="havingPrice"> <br /><br />
+		<input type="checkbox" name="nestedGroupBrand" value="brand"> Brand
+		<input type="checkbox" name="nestedGroupColour" value="colour"> Colour
 
-		<input type="submit" value="Query" name="havingQuerySubmit"></p>
+
+		<input type="submit" value="Submit" name="nestedQuerySubmit"></p>
 	</form>
 
 	<h2>Keyboard Table</h2>
@@ -582,13 +590,23 @@ echo "</table>";
 	printCPUCoolerTable($result);
 	echo "</table>";
 
-	if (isset($_POST['havingQueryRequest']) && isset($_POST['havingPrice'])) {
-		$avgPrice = $_POST['havingPrice'];
-		echo "<h2>Having Result Table</h2>";
-		$havingSql = "SELECT Colour, AVG(Price) FROM CaseFan_Inside GROUP BY Colour HAVING AVG(Price) < $avgPrice";
-		$havingResult = executePlainSQL($havingSql);
+	if (isset($_POST['nestedQueryRequest']) && (isset($_POST['nestedGroupBrand']) || isset($_POST['nestedGroupColour']))) {
+		$nestedSelection = [];
+
+		if (isset($_POST['nestedGroupBrand'])) {
+			$nestedSelection[] = 'Brand';
+		}
+		if (isset($_POST['nestedGroupColour'])) {
+			$nestedSelection[] = 'Colour';
+		}
+
+		$nestedGroupBy = implode(', ', $nestedSelection);
+
+		echo "<h2>Nested Query Result Table</h2>";
+		$nestedSql = "SELECT ".$nestedGroupBy .", AVG(Price) FROM Keyboard GROUP BY $nestedGroupBy HAVING AVG(Price) < (SELECT AVG(Price) FROM Keyboard)";
+		$nestedResult = executePlainSQL($nestedSql);
 		echo "<table border='5'>";
-		printCPUCoolerTable($havingResult);
+		printCPUCoolerTable($nestedResult);
 		echo "</table>";
 	}
 	?>
