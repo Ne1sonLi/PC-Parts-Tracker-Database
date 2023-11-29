@@ -331,137 +331,182 @@ if (isset($_POST['resetTablesRequest'])) {
 		</div>
 	</div>
 
-	<div class ="projection">
+
+<div>
+	<h1>Projection</h1>
+
+<?php
+
+$tableQuery = "SELECT table_name FROM user_tables";
+$tableResult = executePlainSQL($tableQuery);
+
+if ($tableResult) {
+    echo '<form action="" method="post">';
+    echo '<label for="tableDropdown">Select a table:</label>';
+    echo '<select id="tableDropdown" name="selectedTable">';
+    
+    while ($tableRow = oci_fetch_assoc($tableResult)) {
+        $tableName = $tableRow['TABLE_NAME'];
+        echo '<option value="' . $tableName . '">' . $tableName . '</option>';
+    }
+
+    echo '</select>';
+
+    echo '<input type="submit" value="Show Columns">';
+    echo '</form>';
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $selectedTable = $_POST["selectedTable"];
+
+    $columnQuery = "SELECT column_name FROM user_tab_columns WHERE table_name = '$selectedTable'";
+    $columnResult = executePlainSQL($columnQuery);
+
+    if ($columnResult) {
+        echo "<h2>$selectedTable attributes:</h2>";
+        echo '<form action="" method="post">';
+        
+        while ($columnRow = oci_fetch_assoc($columnResult)) {
+            $columnName = $columnRow['COLUMN_NAME'];
+            echo '<input type="checkbox" name="selectedColumns[]" value="' . $columnName . '">';
+            echo '<label for="' . $columnName . '">' . $columnName . '</label><br>';
+        }
+		//store selectedTable value for after submit
+		echo '<input type="hidden" name="hiddenSelectedTable" value="' . $selectedTable . '">';
+
+        echo '<input type="submit" value="Submit">';
+        echo '</form>';
+
+		if (isset($_POST["selectedColumns"]) && is_array($_POST["selectedColumns"])) {
+            $selectedColumns = $_POST["selectedColumns"];
+			$selectedTable = $_POST["hiddenSelectedTable"];
+
+            $columnsString = implode(", ", $selectedColumns);
+
+            $projectionQuery = "SELECT $columnsString FROM $selectedTable";
+            $projectionResult = executePlainSQL($projectionQuery);
+
+			echo "<table border='5'>";
+			printCPUCoolerTable($projectionResult);
+			echo "</table>";
+			
+        } else {
+			$table = "SELECT * FROM $selectedTable";
+			$tableResult = executePlainSQL($table);
+
+			echo "<table border='5'>";
+			printCPUCoolerTable($tableResult);
+			echo "</table>";
+            echo "<p>No columns selected yet</p>";
+        }
 
 
-       <div class="table-continer">
-       <h2>Project a Mouse</h2>
-           <form method="post" action="">
-   <input type="checkbox" name="projectBrand" value="brand"> Brand
-   <input type="checkbox" name="projectModel" value="model"> Model
-   <input type="checkbox" name="projectColour" value="colour"> Colour
-   <input type="checkbox" name="projectSize" value="mouse_size"> Size
-   <input type="checkbox" name="projectWeight" value="weight"> Weight
-   <input type="checkbox" name="projectPrice" value="price"> Price
-   <input type="checkbox" name="projectWiredWireless" value="wired_wireless"> Wired_Wireless
-   <input type="submit" value="Submit">
-       </form>
+    } else {
+        echo "<p>Error getting columns for table $selectedTable</p>";
+    }
+}
 
 
-       <h2>Filtered Mouse Table</h2>
 
 
-       <?php
+
+oci_close($db_conn);
+
+		?>
+
+<div>
+	<h2>Query with Having</h2>
+	<p>The following query will group by the the case fans colour and print out a table where the colour has an average price less than your given input.</p>
+	<form method="POST" action="wrapper.php">
+		<input type="hidden" id="havingQueryRequest" name="havingQueryRequest">
+		Price Lower than: <input type="text" name="havingPrice"> <br /><br />
+
+		<input type="submit" value="Query" name="havingQuerySubmit"></p>
+	</form>
+
+	<h2>CaseFan Table</h2>
+
+	<?php
+	$sql = "SELECT * FROM CaseFan_Inside";
+	$result = executePlainSQL($sql);
+	echo "<table border='5'>";
+	printCPUCoolerTable($result);
+	echo "</table>";
+
+	if (isset($_POST['havingQueryRequest']) && isset($_POST['havingPrice'])) {
+		$avgPrice = $_POST['havingPrice'];
+		echo "<h2>Having Result Table</h2>";
+		$havingSql = "SELECT Colour, AVG(Price) FROM CaseFan_Inside GROUP BY Colour HAVING AVG(Price) < $avgPrice";
+		$havingResult = executePlainSQL($havingSql);
+		echo "<table border='5'>";
+		printCPUCoolerTable($havingResult);
+		echo "</table>";
+	}
+	?>
+</div>
+
+		</body>
+	</html>
+</div>
 
 
-       $selectedColumns = [];
 
-
-       // Check if each checkbox is selected and add the corresponding column to the array
-       if (isset($_POST['projectBrand'])) {
-           $selectedColumns[] = 'brand';
-       }
-       if (isset($_POST['projectModel'])) {
-           $selectedColumns[] = 'model';
-       }
-       if (isset($_POST['projectColour'])) {
-           $selectedColumns[] = 'colour';
-       }
-       if (isset($_POST['projectSize'])) {
-           $selectedColumns[] = 'mouse_size';
-       }
-       if (isset($_POST['projectWeight'])) {
-           $selectedColumns[] = 'weight';
-       }
-       if (isset($_POST['projectPrice'])) {
-           $selectedColumns[] = 'price';
-       }
-       if (isset($_POST['projectWiredWireless'])) {
-           $selectedColumns[] = 'wired_wireless';
-       }
-      
-	   //starting with full table when none selected
-	   if (empty($selectedColumns)) {
-		$selectedColumns[] = '*'; // '*' means select all columns
-		}
-
-       // Construct the SELECT part of the SQL query
-       $selectPart = implode(', ', $selectedColumns);
-      
-      
-       // Use prepared statements to prevent SQL injection
-       $sql = "SELECT $selectPart FROM Mouse";
-      
-       $result = executePlainSQL($sql);
-      
-       echo "<table border='5'>";
-       printCPUCoolerTable($result);
-       echo "</table>";
-?>
-       </div>
-   </div>
-
-	<div class="join">
-		<hr />
-		<div class="table-continer">
-			<h2> Find a Keyboard/Mouse Pair</h2>
-			<div class="form-section">
-				<p>Choose a colour/brand to match (e.g. "I want only Corsair keyboards/mouses"):</p>
-				<form method="POST" action="wrapper.php">
-					<input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
-					Brand: <input type="text" name="joinBrand"> <br /><br />
-					Colour: <input type="text" name="joinColour"> <br /><br />
-
-				<input type="submit" value="Join" name="joinSubmit"></p>
-				</form>
-				<hr />
-		</div>
-		</div>
-	</div>
+<div>
+	<h1>Aggregation with Group By</h1>
+	<p>Price of a GPU</p>
 
 	<div>
-		<div class="table-continer">
-			<h2>Keyboards & Mouses Table</h2>
+		<form method="post" action="">
+    		<input type="checkbox" name="groupBrand" value="brand"> Brand
+    		<input type="checkbox" name="groupFans" value="fans"> Number of Fans
 
-			<?php
-			// join on both
-			if (!empty($_POST['joinBrand']) && !empty($_POST['joinColour'])) {
-				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand AND k.colour = m.colour"; 
-				$jbrand = $_POST['joinBrand'];
-				$jcolour = $_POST['joinColour'];
-				$condition = "k.brand = '$jbrand' AND k.colour = '$jcolour'";
-			}
-			// only join on brand
-			else if (!empty($_POST['joinBrand']) && empty($_POST['joinColour'])) {
-				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand"; 
-				$jbrand = $_POST['joinBrand'];
-				$condition = "k.brand = '$jbrand'";
-			} 
-			// only join on colour
-			else if (empty($_POST['joinBrand']) && !empty($_POST['joinColour'])) {
-				$joinOn = "Keyboard k JOIN Mouse m ON k.colour = m.colour"; 
-				$jcolour = $_POST['joinColour'];
-				$condition = "k.colour = '$jcolour'";
-			} 
-			// both empty
-			else {
-				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand AND k.colour = m.colour"; 
-				$condition = "k.model IS NOT NULL";
-			}			
-			
-			$cols = "k.model AS Keyboard_model, k.brand AS Keyboard_brand, k.colour AS Keyboard_colour, k.price AS Keyboard_price,
-						m.model AS Mouse_model, m.brand AS Mouse_brand, m.colour AS Mouse_colour, m.price AS Mouse_price, k.price + m.price AS Total_price";
-			$sql = "SELECT $cols FROM $joinOn WHERE $condition ORDER BY Total_price ASC";
-			// echo $sql;
-			$result = executePlainSQL($sql);
-			echo "<table border='5'>";
-			printCPUCoolerTable($result);
-			echo "</table>";
+    		<label for="operation">Select an operation:</label>
+    		<select name="operation" id="operation">
+        		<option value="MAX">Max</option>
+        		<option value="MIN">Min</option>
+        		<option value="AVG">Avg</option>
+    		</select>
 
-			?>
-		</div>
+    		<input type="submit" value="Submit">
+		</form>
 	</div>
 
+
+	<?php
+	echo"<h2>GPU_Has_Price</h2>";
+	$priceTableSql = "SELECT * FROM GPU_Has_Price";
+	$fullTableResult = executePlainSQL($priceTableSql);
+	echo "<table border='5'>";
+		printCPUCoolerTable($fullTableResult);
+	echo "</table>";
+
+	$selected = [];
+
+	if (isset($_POST['groupBrand'])) {
+		$selected[] = 'brand';
+	}
+	if (isset($_POST['groupFans'])) {
+		$selected[] = 'fans';
+	}
+
+	$operation = $_POST["operation"];
+
+
+	$groupedBy = implode(', ', $selected);
+
+	$groupBySql = "SELECT $groupedBy ". ", " . $operation . "(price)" . " FROM GPU_Has_Price GROUP BY $groupedBy" ;
+	$groupedByResult = executePlainSQL($groupBySql);
+
+	echo "<table border='5'>";
+	printCPUCoolerTable($groupedByResult);
+echo "</table>";
+
+	echo "$groupBySql";
+	?>
+
+
+
+</div>
 
 	<!-- <h2>Count the Tuples in DemoTable</h2>
 	<form method="GET" action="template.php">

@@ -474,10 +474,16 @@ INSERT INTO CPUCooler_On values('DeepCool GAMMAXX AG400 WH ARGB', 120, 39.99, nu
 INSERT INTO CPUCooler_On values('DeepCool GAMMAXX CT', 120, 49.99, null);
 INSERT INTO CPUCooler_On values('Corsair iCUE H150i Elite CAPELLIX XT', 360, 284.99, null);
 
-INSERT INTO CaseFan_Inside values('NF-P12 Redux', 120, 15.95, 'grey', 'Corsair 5000D CC-9011210-WW', 'Black', 'Mid-Tower');
-INSERT INTO CaseFan_Inside values('NF-A20 PWM', 200, 36.95, 'black', null, null, null);
-INSERT INTO CaseFan_Inside values('QL120', 120, 35.99,'black', null, null, null);
-INSERT INTO CaseFan_Inside values('LL120', 120, 25.99, 'black',  null, null, null);
+INSERT INTO CaseFan_Inside values('Noctua NF-P12 Redux', 120, 15.95, 'grey', null, null, null);
+INSERT INTO CaseFan_Inside values('Noctua NF-A20 PWM', 200, 39.64, 'brown', null, null, null);
+INSERT INTO CaseFan_Inside values('Corsair iCUE QL120', 120, 44.99,'black', null, null, null);
+INSERT INTO CaseFan_Inside values('Corsair iCUE QL140', 140, 49.99,'black', null, null, null);
+INSERT INTO CaseFan_Inside values('Corsair LL Series LL120', 120, 25.99, 'black',  null, null, null);
+INSERT INTO CaseFan_Inside values('Corsair iCUE AR120', 120, 21.74, 'black',  null, null, null);
+INSERT INTO CaseFan_Inside values('Corsair iCUE SP120', 120, 44.99, 'white',  null, null, null);
+INSERT INTO CaseFan_Inside values('Corsair SP120 Elite', 120, 14.99, 'black',  null, null, null);
+INSERT INTO CaseFan_Inside values('Thermalright TL-C12CW-S', 120, 17.90, 'white',  null, null, null);
+INSERT INTO CaseFan_Inside values('Arctic F12 PWM', 120, 15.99, 'white',  null, null, null);
 
 INSERT INTO Storage_Requires values('IronWolf Pro 12', 12, 'SATA', 'HDD', '3.5 Inch', 9, null, null, null, null);
 INSERT INTO Storage_Requires values('WD Read Plus', 6, 'SATA', 'HDD', '3.5 Inch', 9, null, null, null, null);
