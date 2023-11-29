@@ -321,7 +321,7 @@ if (isset($_POST['resetTablesRequest'])) {
 			}
 			
 			$sql = "SELECT * FROM Keyboard WHERE " . $brands . " AND " . $colours . " AND " . $pc . " AND " . $price;
-			echo $sql;
+			// echo $sql;
 			$result = executePlainSQL($sql);
 			echo "<table border='5'>";
 			printCPUCoolerTable($result);
@@ -397,17 +397,70 @@ if (isset($_POST['resetTablesRequest'])) {
        echo "<table border='5'>";
        printCPUCoolerTable($result);
        echo "</table>";
-
-
-
-
-
-
-
-
 ?>
        </div>
    </div>
+
+	<div class="join">
+		<hr />
+		<div class="table-continer">
+			<h2> Find a Keyboard/Mouse Pair</h2>
+			<div class="form-section">
+				<p>Choose a colour/brand to match (e.g. "I want only Corsair keyboards/mouses"):</p>
+				<form method="POST" action="wrapper.php">
+					<input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
+					Brand: <input type="text" name="joinBrand"> <br /><br />
+					Colour: <input type="text" name="joinColour"> <br /><br />
+
+				<input type="submit" value="Join" name="joinSubmit"></p>
+				</form>
+				<hr />
+		</div>
+		</div>
+	</div>
+
+	<div>
+		<div class="table-continer">
+			<h2>Keyboards & Mouses Table</h2>
+
+			<?php
+			// join on both
+			if (!empty($_POST['joinBrand']) && !empty($_POST['joinColour'])) {
+				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand AND k.colour = m.colour"; 
+				$jbrand = $_POST['joinBrand'];
+				$jcolour = $_POST['joinColour'];
+				$condition = "k.brand = '$jbrand' AND k.colour = '$jcolour'";
+			}
+			// only join on brand
+			else if (!empty($_POST['joinBrand']) && empty($_POST['joinColour'])) {
+				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand"; 
+				$jbrand = $_POST['joinBrand'];
+				$condition = "k.brand = '$jbrand'";
+			} 
+			// only join on colour
+			else if (empty($_POST['joinBrand']) && !empty($_POST['joinColour'])) {
+				$joinOn = "Keyboard k JOIN Mouse m ON k.colour = m.colour"; 
+				$jcolour = $_POST['joinColour'];
+				$condition = "k.colour = '$jcolour'";
+			} 
+			// both empty
+			else {
+				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand AND k.colour = m.colour"; 
+				$condition = "k.model IS NOT NULL";
+			}			
+			
+			$cols = "k.model AS Keyboard_model, k.brand AS Keyboard_brand, k.colour AS Keyboard_colour, k.price AS Keyboard_price,
+						m.model AS Mouse_model, m.brand AS Mouse_brand, m.colour AS Mouse_colour, m.price AS Mouse_price, k.price + m.price AS Total_price";
+			$sql = "SELECT $cols FROM $joinOn WHERE $condition ORDER BY Total_price ASC";
+			// echo $sql;
+			$result = executePlainSQL($sql);
+			echo "<table border='5'>";
+			printCPUCoolerTable($result);
+			echo "</table>";
+
+			?>
+		</div>
+	</div>
 
 
 	<!-- <h2>Count the Tuples in DemoTable</h2>
@@ -517,7 +570,6 @@ if (isset($_POST['resetTablesRequest'])) {
 			echo "</tr>";
 		}
 	}
-
 
 	// function printResult($result)
 	// { //prints results from a select statement

@@ -393,6 +393,10 @@ INSERT INTO Mouse values('G305 LIGHTSPEED', 'Black', 'Logitech', 'Standard', 99,
 INSERT INTO Mouse values('G502 HERO', 'Black', 'Logitech', 'Standard', 89, 79.99, 'Wired');
 INSERT INTO Mouse values('Basilisk V3', 'Black', 'Razer', 'Ergonomic', 128, 69.99, 'Wired');
 INSERT INTO Mouse values('DeathAdder', 'Black', 'Razer', 'Standard', 96, 29.99, 'Wired');
+INSERT INTO Mouse values('SCIMITAR RGB ELITE', 'Black', 'Corsair', 'Standard', 113, 189.99, 'Wireless');
+INSERT INTO Mouse values('M65 RGB Ultra Tunable', 'White', 'Corsair', 'Standard', 97, 79.99, 'Wired');
+INSERT INTO Mouse values('G305 LIGHTSPEED', 'White', 'Logitech', 'Standard', 99, 49.99, 'Wireless');
+INSERT INTO Mouse values('M711 Cobra RGB', 'White', 'Redragon', 'Standard', 144, 29.99, 'Wired');
 
 INSERT INTO Keyboard values('Corsair K55 Pro Lite', 'Corsair', 'Black', 100.00, 74.95);
 INSERT INTO Keyboard values('Corsair K70 Pro Mini Wireless', 'Corsair', 'Blue', 60.00, 259.99);
