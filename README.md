@@ -6,4 +6,4 @@ Our project is about modeling PC components to allow users to understand how dif
 
 ### Changes in Schema
 
-We had to remove the table Mouse_Brand because orcale only allowed us to have a maximum of 30 tables. If we included Mouse_Brand, we would have 31 tables which would exceed the space quota we are given to work with in Oracle. We chose to remove this table as it seemed to be a little trivial and we assumed it would not affect the final project much.
+We had to remove the table Mouse_Brand because the Oracle account we were provided with only allowed us to have a maximum of 30 tables. If we included Mouse_Brand, we would have 31 tables which would exceed the space quota we are given to work with in Oracle. We chose to remove this table as it seemed to be a little trivial and we assumed it would not affect the final project much.
