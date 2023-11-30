@@ -33,8 +33,6 @@ $config["dbpassword"] = "a32900045";		// change to 'a' + your student number
 $config["dbserver"] = "dbhost.students.cs.ubc.ca:1522/stu";
 $db_conn = null;	// login credentials are used in connectToDB()
 
-
-// ADDED THIS : initializes db_conn
 connectToDB();
 
 $success = true;	// keep track of errors so page redirects only if there are no errors
@@ -44,7 +42,6 @@ $show_debug_alert_messages = False; // show which methods are being triggered (s
 // The next tag tells the web server to stop parsing the text as PHP. Use the
 // pair of tags wherever the content switches to PHP
 
-// ADDED THIS : Check if buttons have been clicked
 if (isset($_POST['resetTablesRequest'])) {
     // The reset button was clicked, call the handleResetRequest function
     handleResetRequest();
@@ -98,7 +95,6 @@ if (isset($_POST['resetTablesRequest'])) {
 		<p><input type="submit" value="Reset" name="reset"></p>
 	</form>
 
-	<!-- ADDED THIS -->
 	<style>
 		.form-block {
 			display: flex;
@@ -117,8 +113,8 @@ if (isset($_POST['resetTablesRequest'])) {
 		<div class="form-section">
 			<hr />
 			<h2>Insert Values into CPU Cooler Table</h2>
-			<p>This will insert a new row into the currect CPU Cooler Table. (*) fields must be entered.</p>
-			<p>NOTE: CPUCooler_Size must be an integer and Price must be a number!</p>
+			<p>This will insert a new row into the currect CPU Cooler Table. (*) fields are required.</p>
+			<p>NOTE: CPUCooler_Size input must be an integer and Price input must be a number!</p>
 			<form method="POST" action="wrapper.php">
 				<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 				Model (*): <input type="text" name="insModel"> <br /><br />
@@ -149,7 +145,7 @@ if (isset($_POST['resetTablesRequest'])) {
 		<div class="form-section">
 			<hr />
 			<h2>Update Name in CPU Cooler Table</h2>
-			<p>This will change all the names that are currently the old name to the new name in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
+			<p>This will change all the values that are currently the old value to the new value in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
 			<form method="POST" action="wrapper.php">
 				<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
 				Old Price: <input type="text" name="oldPrice"> <br /><br />
@@ -163,7 +159,6 @@ if (isset($_POST['resetTablesRequest'])) {
 		</div>
 	</div>
 
-	<!-- ADDED THIS -->
 	<style>
         .table-container {
             display: inline-block;
@@ -206,6 +201,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	</style>
 
 	<div class="select-container">
+		<hr />
 		<h2>Select a Keyboard</h2>
 		<p>Select filters below:</p>
 		<div class="form-select">
@@ -333,6 +329,7 @@ if (isset($_POST['resetTablesRequest'])) {
 
 
 <div>
+	<hr />
 	<h1>Projection</h1>
 	<p>Select a table from the dropdown, then click show columns and select the desired columns to see</p>
 	<form method="POST" action="wrapper.php">
@@ -478,12 +475,12 @@ oci_close($db_conn);
 	<div>
 		<hr/>
 	<h1>Aggregation with Group By</h1>
-	<p>Price of a GPU</p>
+	<p>Find the maximum, minimum, or average price of GPU(s) based on brand, number of fans or both!</p>
 
 	<div>
-		<form method="post" action="">
+		<form method="POST" action="wrapper.php">
     		<input type="checkbox" name="groupBrand" value="brand"> Brand
-    		<input type="checkbox" name="groupFans" value="fans"> Number of Fans
+    		<input type="checkbox" name="groupFans" value="fans"> Number of Fans <br><br>
 
     		<label for="operation">Select an operation:</label>
     		<select name="operation" id="operation">
@@ -496,44 +493,43 @@ oci_close($db_conn);
 		</form>
 	</div>
 
+	<h2>GPU Table</h2>
 
 	<?php
-	echo"<h2>GPU_Has_Price</h2>";
-	$priceTableSql = "SELECT * FROM GPU_Has_Price";
-	$fullTableResult = executePlainSQL($priceTableSql);
-	echo "<table border='5'>";
-		printCPUCoolerTable($fullTableResult);
-	echo "</table>";
+		$priceTableSql = "SELECT * FROM GPU_Has_Price";
+		$fullTableResult = executePlainSQL($priceTableSql);
+		echo "<table border='5'>";
+			printCPUCoolerTable($fullTableResult);
+		echo "</table>";
 
-	$selected = [];
+		if (isset($_POST['operation']) && (isset($_POST['groupBrand']) || isset($_POST['groupFans']))) {
+			$selected = [];
 
-	if (isset($_POST['groupBrand'])) {
-		$selected[] = 'brand';
-	}
-	if (isset($_POST['groupFans'])) {
-		$selected[] = 'fans';
-	}
+			if (isset($_POST['groupBrand'])) {
+				$selected[] = 'brand';
+			}
+			if (isset($_POST['groupFans'])) {
+				$selected[] = 'fans';
+			}
 
-	$operation = $_POST["operation"];
+			$operation = $_POST["operation"];
 
 
-	$groupedBy = implode(', ', $selected);
+			$groupedBy = implode(', ', $selected);
 
-	$groupBySql = "SELECT $groupedBy ". ", " . $operation . "(price)" . " FROM GPU_Has_Price GROUP BY $groupedBy" ;
-	$groupedByResult = executePlainSQL($groupBySql);
+			$groupBySql = "SELECT $groupedBy ". ", " . $operation . "(price)" . " FROM GPU_Has_Price GROUP BY $groupedBy" ;
+			$groupedByResult = executePlainSQL($groupBySql);
 
-	echo "<table border='5'>";
-	printCPUCoolerTable($groupedByResult);
-	echo "</table>";
-
-	echo "$groupBySql";
+			echo "<h2>Result Table</h2>";
+			echo "<table border='5'>";
+			printCPUCoolerTable($groupedByResult);
+			echo "</table>";
+		}
 	?>
 
 
 <hr/>
 </div>
-
-
 
 <div>
 	<h2>Query with Having</h2>
@@ -719,20 +715,6 @@ echo "</table>";
 		?>
 	</div>
 
-	<!-- <h2>Count the Tuples in DemoTable</h2>
-	<form method="GET" action="template.php">
-		<input type="hidden" id="countTupleRequest" name="countTupleRequest">
-		<input type="submit" name="countTuples"></p>
-	</form>
-
-	<hr />
-
-	<h2>Display Tuples in DemoTable</h2>
-	<form method="GET" action="template.php">
-		<input type="hidden" id="displayTuplesRequest" name="displayTuplesRequest">
-		<input type="submit" name="displayTuples"></p>
-	</form> -->
-
 
 	<?php
 	// The following code will be parsed as PHP
@@ -808,7 +790,6 @@ echo "</table>";
 		}
 	}
 
-	// ADDED THIS
 	function printCPUCoolerTable($result)
 	{
 		echo "<tr>";
@@ -826,19 +807,6 @@ echo "</table>";
 			echo "</tr>";
 		}
 	}
-
-	// function printResult($result)
-	// { //prints results from a select statement
-	// 	echo "<br>Retrieved data from table demoTable:<br>";
-	// 	echo "<table>";
-	// 	echo "<tr><th>ID</th><th>Name</th></tr>";
-
-	// 	while ($row = OCI_Fetch_Array($result, OCI_ASSOC)) {
-	// 		echo "<tr><td>" . $row["ID"] . "</td><td>" . $row["NAME"] . "</td></tr>"; //or just use "echo $row[0]"
-	// 	}
-
-	// 	echo "</table>";
-	// }
 
 	function connectToDB()
 	{
@@ -997,26 +965,6 @@ echo "</table>";
 		executeBoundSQL("delete from CPU_On WHERE model = :bind1", $alltuples);
 		oci_commit($db_conn);
 	}
-
-	// function handleSelectRequest()
-	// {
-	// 	global $db_conn;
-
-	// 	//Getting the values select all that apply for brand
-	// 	// $tuple = array(
-	// 	// 	":bind1" => "brand = 'Corsair'"
-	// 	// );
-
-	// 	// $alltuples = array(
-	// 	// 	$tuple
-	// 	// );
-
-	// 	$result = executePlainSQL("SELECT * FROM Keyboard WHERE brand IS NOT NULL");
-	// 	echo "<table border='5'>";
-	// 	printCPUCoolerTable($result);
-	// 	echo "</table>";
-	// 	oci_commit($db_conn);
-	// }
 
 	function handleDisplayRequest()
 	{
