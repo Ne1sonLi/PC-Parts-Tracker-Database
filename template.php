@@ -670,50 +670,32 @@ echo "</table>";
 
 
 	<!-- Division  -->
-	<div class=table-continer>
-		<h2>Find Cases With All Different Colours of Fans</h2>
-		<form method="post">
-    		<button type="submit" name="divButton">Find Cases</button>
-		</form>
+    <div class=table-continer>
+        <h2>Find Cases That Come With All Mouses</h2>
+        <form method="post">
+            <button type="submit" name="divButton">Find Cases</button>
+        </form>
 
-		<h2>Cases Table</h2>
-		<?php
-			if (isset($_POST['divButton'])) {
-				// create a view
-				// $view = "CREATE VIEW Colours(colour) AS SELECT DISTINCT Colour FROM CaseFan_Inside";
-				// executePlainSQL($view);
-				
-				// $sql = "SELECT * FROM Case_Contains C WHERE NOT EXISTS
-				// 			(SELECT DISTINCT CF.colour FROM CaseFan_Inside CF WHERE NOT EXISTS
-				// 				(SELECT CC.Model, CC.Colour, CC.Case_Size, CC.Price FROM CaseFan_Inside CC
-				// 					WHERE CF.colour = CC.colour
-				// 					AND CC.Model = C.Model
-				// 					AND CC.Colour = C.Colour
-				// 					AND CC.Case_Size = C.Case_Size))";
-				$sql = "SELECT *
-				FROM Case_Contains CC
-				WHERE NOT EXISTS (
-					SELECT CF2.CaseFan_Size
-					FROM CaseFan_Inside CF2
-					WHERE CC.Model = CF2.Case_Model
-						AND CC.Colour = CF2.Case_Colour
-						AND CC.Case_Size = CF2.Case_Size
-					MINUS
-					SELECT CF.CaseFan_Size
-					FROM CaseFan_Inside CF
-					WHERE CC.Model = CF.Case_Model
-						AND CC.Colour = CF.Case_Colour
-						AND CC.Case_Size = CF.Case_Size
-				)";
-			} else {
-				$sql = "SELECT * FROM CaseFan_Inside";
-			}
-			$result = executePlainSQL($sql);
-			echo "<table border='5'>";
-			printCPUCoolerTable($result);
-			echo "</table>";
-		?>
-	</div>
+        <h2>Cases Table</h2>
+        <?php
+            if (isset($_POST['divButton'])) {
+                $sql = "SELECT * FROM Case_Contains CC WHERE NOT EXISTS
+                            (SELECT K.Model FROM Keyboard K WHERE NOT EXISTS 
+                                (SELECT C.Case_Model, C.Case_Colour, C.Case_Size FROM Connected_To C 
+                                    WHERE C.Keyboard_Model = K.Model 
+                                    AND CC.Model = C.Case_Model
+                                    AND CC.Colour = C.Case_Colour
+                                    AND CC.Case_Size = C.Case_Size))";
+            } else {
+                $sql = "SELECT * FROM Connected_To";
+            }
+            $result = executePlainSQL($sql);
+            echo "<table border='5'>";
+            printCPUCoolerTable($result);
+            echo "</table>";
+        ?>
+    </div>
+
 
 
 	<?php

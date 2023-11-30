@@ -520,6 +520,12 @@ INSERT INTO Plugged_Into values('Corsair iCUE 4000X RGB CC-9011204-WW', 'Black',
 INSERT INTO Plugged_Into values('Corsair iCUE 4000X RGB CC-9011205-WW', 'White', 'Mid-Tower', 'DeathAdder', 'Black');
 
 INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Corsair K55 Pro Lite');
+INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Corsair K70 Pro Mini Wireless');
+INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Corsair K100 Air Wireless RGB Ultra-Thin');
+INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Corsair K100 RGB Optical-Mechanical');
+INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Logitech G815 LIGHTSYNC RGB Mecahnical W');
+INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Logitech G815 LIGHTSYNC RGB Mecahnical');
+INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Havit Mechanical Keyboard 89 Keys');
 INSERT INTO Connected_To values('Corsair 4000D CC-9011201-WW', 'White', 'Mid-Tower', 'Corsair K70 Pro Mini Wireless');
 INSERT INTO Connected_To values('Corsair iCUE 4000X RGB CC-9011204-WW', 'Black', 'Mid-Tower', 'Corsair K100 Air Wireless RGB Ultra-Thin');
 INSERT INTO Connected_To values('Corsair iCUE 4000X RGB CC-9011205-WW', 'White', 'Mid-Tower', 'Corsair K100 RGB Optical-Mechanical');
