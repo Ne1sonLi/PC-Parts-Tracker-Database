@@ -401,8 +401,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			echo "<table border='5'>";
 			printCPUCoolerTable($tableResult);
 			echo "</table>";
-            echo "<p>No columns selected yet</p>";
-        }
+            // echo "<p>No columns selected yet</p>";
+        } else if (!isset($_POST["selectedColumns"])) {
+			echo "Did not select columns";
+		}
     } else {
         echo "<p>Error getting columns for table $selectedTable</p>";
     }
