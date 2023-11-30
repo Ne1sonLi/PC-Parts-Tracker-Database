@@ -423,7 +423,7 @@ oci_close($db_conn);
 					Brand: <input type="text" name="joinBrand"> <br /><br />
 					Colour: <input type="text" name="joinColour"> <br /><br />
 
-				<input type="submit" value="Join" name="joinSubmit"></p>
+				<input type="submit" value="Find" name="joinSubmit"></p>
 				</form>
 			</div>
 		</div>
@@ -916,10 +916,18 @@ echo "</table>";
 
 	function insertIntoCPUTable($CPUModel)
 	{
-		global $db_conn;
+		global $db_conn, $success;
 
-		$sql = "INSERT INTO CPU_On (Model) VALUES ('" . $CPUModel . "')";
-		$success = oci_execute(oci_parse($db_conn, $sql), OCI_DEFAULT);
+		$tuple = array(
+			":bind1" => $CPUModel
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$sql = "INSERT INTO CPU_On (Model) VALUES (:bind1)";
+		executeBoundSQL($sql, $alltuples);
 
         if ($success) {
             oci_commit($db_conn);
