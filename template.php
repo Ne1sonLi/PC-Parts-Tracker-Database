@@ -203,7 +203,7 @@ if (isset($_POST['resetTablesRequest'])) {
 	<div class="select-container">
 		<hr />
 		<h2>Select a Keyboard</h2>
-		<p>Select filters below:</p>
+		<p>Select filters below to find keyboards that match what you want!</p>
 		<div class="form-select">
 			<form method="POST" action="wrapper.php">
 				<div class="select-col">
@@ -416,7 +416,7 @@ oci_close($db_conn);
 		<hr />
 		<div class="table-continer">
 			<h2> Find a Keyboard/Mouse Pair</h2>
-			<div class="form-section">
+			<div>
 				<p>Choose a colour/brand to match (e.g. "I want only Corsair keyboards/mouses"):</p>
 				<form method="POST" action="wrapper.php">
 					<input type="hidden" id="joinQueryRequest" name="joinQueryRequest">
