@@ -770,7 +770,6 @@ echo "</table>";
 				$success = False;
 			}
 		}
-		return $statement;
 	}
 
 	function printCPUCoolerTable($result)
