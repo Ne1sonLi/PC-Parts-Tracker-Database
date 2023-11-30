@@ -334,37 +334,42 @@ if (isset($_POST['resetTablesRequest'])) {
 
 <div>
 	<h1>Projection</h1>
+	<p>Select a table from the dropdown, then click show columns and select the desired columns to see</p>
+	<form method="POST" action="wrapper.php">
+		<label for="tableDropdown">Select a table:</label>
+		<select id="tableDropdown" name="selectedTable">
 
+		<?php
+			$tableQuery = "SELECT table_name FROM user_tables";
+			$tableResult = executePlainSQL($tableQuery);
+			
+			if ($tableResult) {
+				while ($tableRow = oci_fetch_assoc($tableResult)) {
+					$tableName = $tableRow['TABLE_NAME'];
+					echo '<option value="' . $tableName . '">' . $tableName . '</option>';
+				}
+			}
+			
+		?>
+
+		</select>
+		<input type="submit" value="Show Columns" name="showColumns">
+	</form>
+		
 <?php
 
-$tableQuery = "SELECT table_name FROM user_tables";
-$tableResult = executePlainSQL($tableQuery);
-
-if ($tableResult) {
-    echo '<form action="" method="post">';
-    echo '<label for="tableDropdown">Select a table:</label>';
-    echo '<select id="tableDropdown" name="selectedTable">';
-    
-    while ($tableRow = oci_fetch_assoc($tableResult)) {
-        $tableName = $tableRow['TABLE_NAME'];
-        echo '<option value="' . $tableName . '">' . $tableName . '</option>';
-    }
-
-    echo '</select>';
-
-    echo '<input type="submit" value="Show Columns">';
-    echo '</form>';
-}
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $selectedTable = $_POST["selectedTable"];
+	$selectedTable = null;
+	if (isset($_POST["selectedTable"])) {
+		$selectedTable = $_POST["selectedTable"];
+	}
 
     $columnQuery = "SELECT column_name FROM user_tab_columns WHERE table_name = '$selectedTable'";
     $columnResult = executePlainSQL($columnQuery);
 
     if ($columnResult) {
         echo "<h2>$selectedTable attributes:</h2>";
-        echo '<form action="" method="post">';
+        echo '<form action="wrapper.php" method="POST">';
         
         while ($columnRow = oci_fetch_assoc($columnResult)) {
             $columnName = $columnRow['COLUMN_NAME'];
@@ -383,14 +388,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             $columnsString = implode(", ", $selectedColumns);
 
-            $projectionQuery = "SELECT $columnsString FROM $selectedTable";
+            $projectionQuery = "SELECT DISTINCT $columnsString FROM $selectedTable";
             $projectionResult = executePlainSQL($projectionQuery);
 
 			echo "<table border='5'>";
 			printCPUCoolerTable($projectionResult);
 			echo "</table>";
-			
-        } else {
+        } else if ($selectedTable) {
 			$table = "SELECT * FROM $selectedTable";
 			$tableResult = executePlainSQL($table);
 
@@ -399,8 +403,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			echo "</table>";
             echo "<p>No columns selected yet</p>";
         }
-
-
     } else {
         echo "<p>Error getting columns for table $selectedTable</p>";
     }
@@ -520,7 +522,7 @@ oci_close($db_conn);
 
 	echo "<table border='5'>";
 	printCPUCoolerTable($groupedByResult);
-echo "</table>";
+	echo "</table>";
 
 	echo "$groupBySql";
 	?>
@@ -563,12 +565,6 @@ echo "</table>";
 	<hr/>
 </div>
 
-
-
-
-
-
-<!-- NELSON WORKING HERE -->
 <div>
 	<h2>Nested Query</h2>
 	<p>The following query will group the keyboards by your choosen input(s) and print out a table where the group has an average price less than the average price of all the keyboards.</p>
