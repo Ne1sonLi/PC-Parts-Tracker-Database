@@ -437,33 +437,51 @@ oci_close($db_conn);
 			// join on both
 			if (!empty($_POST['joinBrand']) && !empty($_POST['joinColour'])) {
 				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand AND k.colour = m.colour"; 
-				$jbrand = $_POST['joinBrand'];
-				$jcolour = $_POST['joinColour'];
-				$condition = "k.brand = '$jbrand' AND k.colour = '$jcolour'";
+				$tuple = array(
+					":bind1" => $_POST['joinBrand'],
+					":bind2" => $_POST['joinColour']
+				);
+				$alltuples = array(
+					$tuple
+				);
+				$condition = "k.brand = :bind1 AND k.colour = :bind2";
 			}
 			// only join on brand
 			else if (!empty($_POST['joinBrand']) && empty($_POST['joinColour'])) {
 				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand"; 
-				$jbrand = $_POST['joinBrand'];
-				$condition = "k.brand = '$jbrand'";
+				$tuple = array(
+					":bind1" => $_POST['joinBrand']
+				);
+				$alltuples = array(
+					$tuple
+				);
+				$condition = "k.brand = :bind1";
 			} 
 			// only join on colour
 			else if (empty($_POST['joinBrand']) && !empty($_POST['joinColour'])) {
 				$joinOn = "Keyboard k JOIN Mouse m ON k.colour = m.colour"; 
-				$jcolour = $_POST['joinColour'];
-				$condition = "k.colour = '$jcolour'";
+				$tuple = array(
+					":bind2" => $_POST['joinColour']
+				);
+				$alltuples = array(
+					$tuple
+				);
+				$condition = "k.colour = :bind2";
 			} 
 			// both empty
 			else {
 				$joinOn = "Keyboard k JOIN Mouse m ON k.brand = m.brand AND k.colour = m.colour"; 
+				$tuple = array();
+				$alltuples = array(
+					$tuple
+				);
 				$condition = "k.model IS NOT NULL";
 			}			
 
 			$cols = "k.model AS Keyboard_model, k.brand AS Keyboard_brand, k.colour AS Keyboard_colour, k.price AS Keyboard_price,
 						m.model AS Mouse_model, m.brand AS Mouse_brand, m.colour AS Mouse_colour, m.price AS Mouse_price, k.price + m.price AS Total_price";
 			$sql = "SELECT $cols FROM $joinOn WHERE $condition ORDER BY Total_price ASC";
-			// echo $sql;
-			$result = executePlainSQL($sql);
+			$result = executeBoundSQL($sql, $alltuples);
 			echo "<table border='5'>";
 			printCPUCoolerTable($result);
 			echo "</table>";
@@ -551,10 +569,14 @@ oci_close($db_conn);
 	echo "</table>";
 
 	if (isset($_POST['havingQueryRequest']) && isset($_POST['havingPrice'])) {
-		$avgPrice = $_POST['havingPrice'];
+		$tuple = array(
+			":bind1" => $_POST['havingPrice']
+		);
+		$alltuples = array(
+			$tuple
+		);
 		echo "<h2>Having Result Table</h2>";
-		$havingSql = "SELECT Colour, AVG(Price) FROM CaseFan_Inside GROUP BY Colour HAVING AVG(Price) < $avgPrice";
-		$havingResult = executePlainSQL($havingSql);
+		$havingResult = executeBoundSQL("SELECT Colour, AVG(Price) FROM CaseFan_Inside GROUP BY Colour HAVING AVG(Price) < :bind1", $alltuples);
 		echo "<table border='5'>";
 		printCPUCoolerTable($havingResult);
 		echo "</table>";
@@ -770,6 +792,8 @@ echo "</table>";
 				$success = False;
 			}
 		}
+
+		return $statement;
 	}
 
 	function printCPUCoolerTable($result)
