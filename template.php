@@ -423,7 +423,7 @@ oci_close($db_conn);
 					Brand: <input type="text" name="joinBrand"> <br /><br />
 					Colour: <input type="text" name="joinColour"> <br /><br />
 
-				<input type="submit" value="Join" name="joinSubmit"></p>
+				<input type="submit" value="Find" name="joinSubmit"></p>
 				</form>
 			</div>
 		</div>
@@ -832,9 +832,27 @@ echo "</table>";
 			insertIntoCPUTable($new_cpu);
 		}
 
+		$tuple1 = array(
+			":bind1" => $old_price,
+			":bind2" => $new_price
+		);
+
+		$alltuples1 = array(
+			$tuple1
+		);
+
+		$tuple2 = array(
+			":bind3" => $old_cpu,
+			":bind4" => $new_cpu
+		);
+
+		$alltuples2 = array(
+			$tuple2
+		);
+
 		// you need the wrap the old name and new name values with single quotations
-		executePlainSQL("UPDATE CPUCooler_On SET price='" . $new_price . "' WHERE price='" . $old_price . "'");
-		executePlainSQL("UPDATE CPUCooler_On SET cpu_model='" . $new_cpu . "' WHERE cpu_model='" . $old_cpu . "'");
+		executeBoundSQL("UPDATE CPUCooler_On SET price = :bind2 WHERE price = :bind1", $alltuples1);
+		executeBoundSQL("UPDATE CPUCooler_On SET cpu_model = :bind4 WHERE cpu_model = :bind3", $alltuples2);
 		oci_commit($db_conn);
 	}
 
@@ -916,10 +934,18 @@ echo "</table>";
 
 	function insertIntoCPUTable($CPUModel)
 	{
-		global $db_conn;
+		global $db_conn, $success;
 
-		$sql = "INSERT INTO CPU_On (Model) VALUES ('" . $CPUModel . "')";
-		$success = oci_execute(oci_parse($db_conn, $sql), OCI_DEFAULT);
+		$tuple = array(
+			":bind1" => $CPUModel
+		);
+
+		$alltuples = array(
+			$tuple
+		);
+
+		$sql = "INSERT INTO CPU_On (Model) VALUES (:bind1)";
+		executeBoundSQL($sql, $alltuples);
 
         if ($success) {
             oci_commit($db_conn);
@@ -936,7 +962,6 @@ echo "</table>";
 		//Getting the values from user and delete data from table
 		$tuple = array(
 			":bind1" => $_POST['delModel'],
-			// ":bind2" => $_POST['delCoolerSize']
 		);
 
 		$alltuples = array(
