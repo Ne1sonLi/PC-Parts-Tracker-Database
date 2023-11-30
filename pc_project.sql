@@ -347,10 +347,16 @@ INSERT INTO CPUCooler_On_Model values ('DeepCool GAMMAXX AG400 WH ARGB', 'RGB', 
 INSERT INTO CPUCooler_On_Model values ('DeepCool GAMMAXX CT', 'RGB', 'Deepcool', 'Air', null);
 INSERT INTO CPUCooler_On_Model values ('Corsair iCUE H150i Elite CAPELLIX XT', 'RGB', 'Corsair', 'Liquid', null);
 
-INSERT INTO CaseFan_Inside_Model values ('NF-P12 Redux', 'Noctua', null);
-INSERT INTO CaseFan_Inside_Model values ('NF-A20 PWM', 'Noctua', null);
-INSERT INTO CaseFan_Inside_Model values ('QL120', 'Corsair', 'RGB');
-INSERT INTO CaseFan_Inside_Model values ('LL120', 'Corsair', 'RGB');
+INSERT INTO CaseFan_Inside_Model values('Noctua NF-P12 Redux', 'Noctua', null);
+INSERT INTO CaseFan_Inside_Model values('Noctua NF-A20 PWM', 'Noctua', null);
+INSERT INTO CaseFan_Inside_Model values('Corsair iCUE QL120', 'Corsair', 'RGB');
+INSERT INTO CaseFan_Inside_Model values('Corsair iCUE QL140', 'Corsair', 'RGB');
+INSERT INTO CaseFan_Inside_Model values('Corsair LL Series LL120', 'Corsair', 'RGB');
+INSERT INTO CaseFan_Inside_Model values('Corsair iCUE AR120', 'Corsair', 'RGB');
+INSERT INTO CaseFan_Inside_Model values('Corsair iCUE SP120', 'Corsair', 'RGB');
+INSERT INTO CaseFan_Inside_Model values('Corsair SP120 Elite', 'Corsair', 'RGB');
+INSERT INTO CaseFan_Inside_Model values('Thermalright TL-C12CW-S', 'Thermalright', null);
+INSERT INTO CaseFan_Inside_Model values('Arctic F12 PWM', 'Arctic', 'RGB');
 
 INSERT INTO CPU_On_Power values (6, 5000, 65);
 INSERT INTO CPU_On_Power values (8, 7000, 120);
