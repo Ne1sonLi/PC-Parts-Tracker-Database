@@ -111,7 +111,7 @@ include 'navbar.php';
 			<h2>Insert Values into CPU Cooler Table</h2>
 			<p>This will insert a new row into the currect CPU Cooler Table. (*) fields are required.</p>
 			<p>NOTE: CPUCooler_Size input must be an integer and Price input must be a number!</p>
-			<form method="POST" action="wrapper.php">
+			<form method="POST" action="wrapper2.php">
 				<input type="hidden" id="insertQueryRequest" name="insertQueryRequest">
 				Model (*): <input type="text" name="insModel"> <br /><br />
 				CPUCooler_Size (*): <input type="text" name="insCoolerSize"> <br /><br />
@@ -128,7 +128,7 @@ include 'navbar.php';
 			<h2>Delete Row in CPU Table</h2>
 			<p>This deletes a row in the CPU Table. Specify the row by stating its Model.</p>
 			<p>WARNING: Deleting a row here might delete a row in the CPU Cooler table!</p>
-			<form method="POST" action="wrapper.php">
+			<form method="POST" action="wrapper2.php">
 				<input type="hidden" id="deleteQueryRequest" name="deleteQueryRequest">
 				Model : <input type="text" name="delModel"> <br /><br />
 				<!-- CPUCooler_Size : <input type="text" name="delCoolerSize"> <br /><br /> -->
@@ -142,7 +142,7 @@ include 'navbar.php';
 			<hr />
 			<h2>Update Name in CPU Cooler Table</h2>
 			<p>This will change all the values that are currently the old value to the new value in the table. The values are case sensitive and if you enter in the wrong case, the update statement will not do anything.</p>
-			<form method="POST" action="wrapper.php">
+			<form method="POST" action="wrapper2.php">
 				<input type="hidden" id="updateQueryRequest" name="updateQueryRequest">
 				Old Price: <input type="text" name="oldPrice"> <br /><br />
 				New Price: <input type="text" name="newPrice"> <br /><br />
