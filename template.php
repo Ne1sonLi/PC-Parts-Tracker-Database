@@ -16,6 +16,12 @@
 -->
 
 <?php
+
+include "./functions.php";
+?>
+
+
+<!-- <?php
 // The preceding tag tells the web server to parse the following text as PHP
 // rather than HTML (the default)
 
@@ -77,7 +83,7 @@ if (isset($_POST['resetTablesRequest'])) {
 }
 
 
-?>
+?> -->
 
 <html>
 
@@ -720,7 +726,7 @@ echo "</table>";
 
 
 
-	<?php
+	<!-- <?php
 	// The following code will be parsed as PHP
 
 	function debugAlertMessage($message)
@@ -1047,7 +1053,7 @@ echo "</table>";
 	}
 
 	// End PHP parsing and send the rest of the HTML content
-	?>
+	?> -->
 </body>
 
 </html>
