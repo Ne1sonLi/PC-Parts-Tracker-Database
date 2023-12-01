@@ -509,11 +509,13 @@ INSERT INTO Monitor_Attached_To_Model values('LG 24MP40A-C Full HD LCD', 'LG', '
 INSERT INTO Monitor_Attached_To_Model values('Samsung LS24R350FZNXZA LED-Lit Monitor', 'Samsung', 'LED');
 INSERT INTO Monitor_Attached_To_Model values('Samsung LS24T350FHNXZA LED-Lit Monitor', 'Samsung', 'LED');
 INSERT INTO Monitor_Attached_To_Model values('Alienware AW3423DWF QD-OLED LED', 'Alienware', 'OLED');
+INSERT INTO Monitor_Attached_To_Model values('ViewSonic Elite XG270', 'ViewSonic', 'LED');
 
 INSERT INTO Monitor_Attached_To values('Alienware AW3423DWF QD-OLED LED', '1800R', '3440 x 1440', 165, 34, 0.1, 999.99, null, null, null, null, null, null, null, null, null);
 INSERT INTO Monitor_Attached_To values('Samsung LS32B200NWNXGO LED Monitor', '4000R', '1920 x 1080', 75, 32, 8, 199.99, null, null, null, null, null, null, null, null, null);
 INSERT INTO Monitor_Attached_To values('Samsung LS24T350FHNXZA LED-Lit Monitor', '4000R', '1920 x 1080', 75, 24, 5, 128.00, null, null, null, null, null, null, null, null, null);
 INSERT INTO Monitor_Attached_To values('Samsung LS24R350FZNXZA LED-Lit Monitor', '4000R', '1920 x 1080', 75, 24, 5, 128.00, null, null, null, null, null, null, null, null, null);
+INSERT INTO Monitor_Attached_To values('ViewSonic Elite XG270 LED', '4000R', '1920 x 1080', 240, 27, 1, 691.00, null, null, null, null, null, null, null, null, null);
 
 INSERT INTO RAM_Placed_On values('VENGEANCE LPX', 'DDR4', 32, 3200, 114.00, null, null, null, null);
 INSERT INTO RAM_Placed_On values('VENGEANCE RGB PRO SL', 'DDR4', 32, 3600, 134.99, null, null, null, null);
