@@ -424,6 +424,7 @@ INSERT INTO Switches_Price values('Panda Switch Unlubed', 'Glorious Gaming', 'Or
 INSERT INTO Switches_Price values('Wisteria 39gf Linear', 'EPOMAKER', 'Wisteria', 11.99);
 INSERT INTO Switches_Price values('Dawn Pink 38gf Linear', 'EPOMAKER', 'Dawn Pink', 11.99);
 
+INSERT INTO GPU_Has_Model values('RTX 3060', 3);
 INSERT INTO GPU_Has_Model values('RTX 2060', 3);
 INSERT INTO GPU_Has_Model values('GTX 1050', 3);
 INSERT INTO GPU_Has_Model values('GTX 980', 2);
@@ -444,11 +445,11 @@ INSERT INTO GPU_Has_Power values('GTX 1050', 8, 3, 75);
 INSERT INTO RAM_Placed_On_Power values('DDR4', 32, 12);
 INSERT INTO RAM_Placed_On_Power values('DDR5', 32, 16);
 
-INSERT INTO PowerSupply_In_Model values('RM750e', 'CORSAIR', '80+ Gold', 750);
-INSERT INTO PowerSupply_In_Model values('RM1000x', 'CORSAIR', '80+ Gold', 1000);
+INSERT INTO PowerSupply_In_Model values('RM750e', 'Corsair', '80+ Gold', 750);
+INSERT INTO PowerSupply_In_Model values('RM1000x', 'Corsair', '80+ Gold', 1000);
 INSERT INTO PowerSupply_In_Model values('Toughpower GX2', 'Thermaltake', '80+ Gold', 600);
-INSERT INTO PowerSupply_In_Model values('SF750', 'CORSAIR', '80+ Platinum', 1200);
-INSERT INTO PowerSupply_In_Model values('CX650M', 'CORSAIR', '80+ Bronze', 650);
+INSERT INTO PowerSupply_In_Model values('SF750', 'Corsair', '80+ Platinum', 1200);
+INSERT INTO PowerSupply_In_Model values('CX650M', 'Corsair', '80+ Bronze', 650);
 
 INSERT INTO Case_Contains values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 119.98);
 INSERT INTO Case_Contains values('Corsair 4000D CC-9011201-WW', 'White', 'Mid-Tower', 119.99);
