@@ -81,7 +81,7 @@ include 'navbar.php';
 	<h2>Reset</h2>
 	<p>To reset the tables to the original values, please click the "Reset" button below. If this is the first time you're running this page, please click "Reset" to initialize the tables</p>
 
-	<form method="POST" action="wrapper.php">
+	<form method="POST" action="wrapper2.php">
 		<!-- "action" specifies the file or page that will receive the form data for processing. As with this example, it can be this same file. -->
 		<input type="hidden" id="resetTablesRequest" name="resetTablesRequest">
 		<p><input type="submit" value="Reset" name="reset"></p>
