@@ -527,6 +527,7 @@ INSERT INTO Plugged_Into values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tow
 INSERT INTO Plugged_Into values('Corsair 4000D CC-9011201-WW', 'White', 'Mid-Tower', 'G502 HERO', 'Black');
 INSERT INTO Plugged_Into values('Corsair iCUE 4000X RGB CC-9011204-WW', 'Black', 'Mid-Tower', 'Basilisk V3', 'Black');
 INSERT INTO Plugged_Into values('Corsair iCUE 4000X RGB CC-9011205-WW', 'White', 'Mid-Tower', 'DeathAdder', 'Black');
+INSERT INTO Plugged_Into values('Thermaltake Versa H17', 'Black', 'Mini-Tower', 'DeathAdder', 'Black');
 
 INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Corsair K55 Pro Lite');
 INSERT INTO Connected_To values('Corsair 4000D CC-9011200-WW', 'Black', 'Mid-Tower', 'Corsair K70 Pro Mini Wireless');
