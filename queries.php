@@ -70,6 +70,10 @@ include 'navbar.php';
 
 <html>
 
+<head>
+	<title>CPSC 304 - PC Parts Database Project : Queries</title>
+</head>
+
 	<!-- join -->
 	<div class="join">
 		<hr />

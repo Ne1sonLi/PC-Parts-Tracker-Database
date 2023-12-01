@@ -67,6 +67,10 @@ if (isset($_POST['resetTablesRequest'])) {
 include 'navbar.php';
 ?>
 <html>
+
+<head>
+	<title>CPSC 304 - PC Parts Database Project : Insert, Update, Delete</title>
+</head>
     <!-- <div>
         <h1>CPSC 304 - PC Parts Database Project</h1>
     </div>

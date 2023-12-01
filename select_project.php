@@ -68,6 +68,10 @@ include 'navbar.php';
 ?>
 
 <html>
+
+<head>
+	<title>CPSC 304 - PC Parts Database Project : Select & Project</title>
+</head>
     
 	<style> 
 		.select-col {
