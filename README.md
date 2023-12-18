@@ -10,11 +10,11 @@ When users provide text input in this project, it is sanitized through a boundin
 
 1. Here is the home page where you can switch between the 3 different tabs using the navigation bar and reset the tuples using `Reset` button.
      
-      ![Homepage.png](README_images/Homepage.png)
+      ![homepage.png](README_images/homepage.png)
 
 2. When inserting new PC parts, simply add the required fields into the appropriate text boxes and click `Insert`. Here we are adding a CPU Cooler called `Model 1` with size 100, price 19.99 and cooling CPU `new cpu model`.
 
-      ![insert_1.png](README_images/Insert_1.png)
+      ![insert_1.png](README_images/insert_1.png)
 
       ![insert_1.png](README_images/insert_2.png)
 
