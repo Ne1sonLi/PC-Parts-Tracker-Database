@@ -16,24 +16,56 @@ When users provide text input in this project, it is sanitized through a boundin
 
       ![insert_1.png](README_images/insert_1.png)
 
-      ![insert_1.png](README_images/insert_2.png)
+      ![insert_2.png](README_images/insert_2.png)
 
    
-4. To delete a current PC part, input the CPU Model you would like to remove and press `Delete`. Here we are deleting...
+3. To delete a current PC part, input the CPU Model you would like to remove and press `Delete`. Here we are deleting the `Ryzen 5 5600X` CPU.
 
-5. To update the price of a PC part, specify the old price you want to change and the new price you want to change it to and click `Update`. Here we are updating all the ...
+      ![delete_1.png](README_images/delete_1.png)
 
-6. To filter for keyboards with a specific brand, colour, percentage or price, check the filters you want to apply and click `Find Keyboards`. Below, we are finding ...
+      ![delete_2.png](README_images/delete_2.png)
 
-7. To see any table in the database, pick the table from the dropdown, click `Show Columns` then check off the attribute you would like to see. Here we are looking at the ...
+4. To update the price of a PC part, specify the old price you want to change and the new price you want to change it to and click `Update`. Here we are updating all the CPU fans with a price of $284.99 to a new price of $250.00.
 
-8. To find a keyboard and mouse pair that have the same colour, brand or both, input your desired brand and/or colour and press `Find`. Below we are finding keyboards and mouse that ...
+      ![update_1.png](README_images/update_1.png)
 
-9. To find the maximum, minimum, or average price of GPUs based on their brand and/or number of fans, check off the attributes you want to group by and select the operation (max, min, avg) and click `Submit`. Here we are grouping by ...
+      ![update_2.png](README_images/update_2.png)
 
-10. To search for case fan colours that have an average price less than a certain value, input that price in the text box and click `Submit`. Here we are looking for case fan colours with an average price less than ...
+5. To filter for keyboards with a specific brand, colour, percentage or price, check the filters you want to apply and click `Find Keyboards`. Below, we are finding keyboards with the of Corsair or Logitech that are black or white with a 100 percentage size and are under $100.
 
-11. To determine which brand and colour of keyboards have a lower average price than the average price of all keyboards, check off the attributes you want to group by and press `Subimt`. Below we are grouping by ...
+      ![filter_1.png](README_images/filter_1.png)
+
+      ![filter_2.png](README_images/filter_2.png)
+
+6. To see any table in the database, pick the table from the dropdown, click `Show Columns` then check off the attribute you would like to see. Here we are looking at the `Mouse` table and selecting the columns : Model, Brand, Mouse_Size, and Weight.
+
+      ![projection_1.png](README_images/projection_1.png)
+
+      ![projection_2.png](README_images/projection_2.png)
+
+7. To find a keyboard and mouse pair that have the same colour, brand or both, input your desired brand and/or colour and press `Find`. Below we are finding keyboards and mouse pairs that both have the brand `Corsair` and are both `black`.
+
+      ![find_pair_1.png](README_images/find_pair_1.png)
+
+      ![find_pair_2.png](README_images/find_pair_2.png)
+
+8. To find the maximum, minimum, or average price of GPUs based on their brand and/or number of fans, check off the attributes you want to group by and select the operation (max, min, avg) and click `Submit`. Here we are grouping by `brand` and finding the `average` price for each brand.
+
+      ![GPU_1.png](README_images/GPU_1.png)
+
+      ![GPU_2.png](README_images/GPU_2.png)
+
+9. To search for case fan colours that have an average price less than a certain value, input that price in the text box and click `Submit`. Here we are looking for case fan colours with an average price less than $30.
+
+      ![lower_1.png](README_images/lower_1.png)
+
+      ![lower_2.png](README_images/lower_2.png)
+
+10. To determine which brand and colour of keyboards have a lower average price than the average price of all keyboards, check off the attributes you want to group by and press `Subimt`. Below we are grouping by `brand` and `colour`.
+
+      ![nested_1.png](README_images/nested_1.png)
+
+      ![nested_2.png](README_images/nested_2.png)
 
 
 
@@ -47,7 +79,7 @@ This milestone was the introduction of the project. Here the idea was brought to
 
 ## Milestone 2
 
-Milestone 2 included improvements to the ER diagram to ensure that it models real PC parts more accurately. In addition, the ER diagram was translated into the appropriate relational model. From there, each table was decomposed into BCNF (Boyce-Codd Normal Form) by breaking down the tables on their functional dependencies. Finally, the SQL/DDL statements for creating each normalized table were drafted along with the states for inserting 5 tuples into each one.
+Milestone 2 included improvements to the ER diagram to ensure that it models real PC parts more accurately. These improvements were guided by the feedback we received from our mentor. In addition, the ER diagram was translated into the appropriate relational model. From there, each table was decomposed into BCNF (Boyce-Codd Normal Form) by breaking down the tables on their functional dependencies. Finally, the SQL/DDL statements for creating each normalized table were drafted along with the states for inserting 5 tuples into each one.
 
 ## Milestone 3
 
